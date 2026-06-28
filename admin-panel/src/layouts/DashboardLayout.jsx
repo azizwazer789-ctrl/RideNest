@@ -8,12 +8,20 @@ const navItems = [
   { to: "/dashboard", label: "Overview", end: true },
   { to: "/dashboard/queue", label: "Approval Queue" },
   { to: "/dashboard/listings", label: "All Listings" },
+  { to: "/dashboard/payments", label: "Payments" },
+  { to: "/dashboard/payouts", label: "Vendor Payouts" },
+  { to: "/dashboard/analytics", label: "Analytics" },
+  { to: "/dashboard/reviews", label: "Reviews" },
 ];
 
 const pageTitles = {
   "/dashboard": "Overview",
   "/dashboard/queue": "Approval Queue",
   "/dashboard/listings": "All Listings",
+  "/dashboard/payments": "Payments Overview",
+  "/dashboard/payouts": "Vendor Payouts",
+  "/dashboard/analytics": "Analytics Dashboard",
+  "/dashboard/reviews": "Reviews Moderation",
 };
 
 function DashboardLayout() {

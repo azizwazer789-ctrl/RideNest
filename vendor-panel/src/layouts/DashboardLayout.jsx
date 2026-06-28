@@ -8,6 +8,7 @@ const navItems = [
   { to: "/dashboard", label: "Overview", end: true },
   { to: "/dashboard/vehicles", label: "My Vehicles" },
   { to: "/dashboard/bookings", label: "Bookings" },
+  { to: "/dashboard/messages", label: "Messages" },
   { to: "/add-vehicle", label: "Add Vehicle" },
 ];
 
@@ -15,6 +16,7 @@ const pageTitles = {
   "/dashboard": "Overview",
   "/dashboard/vehicles": "My Vehicles",
   "/dashboard/bookings": "Booking Requests",
+  "/dashboard/messages": "Messages",
   "/add-vehicle": "Add Vehicle",
 };
 

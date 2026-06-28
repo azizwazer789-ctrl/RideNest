@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AdminVehicleCard from "../../components/dashboard/AdminVehicleCard";
 import {
   approveVehicle,
-  getAdminVehicles,
+  getAllAdminVehicles,
   getErrorMessage,
   rejectVehicle,
 } from "../../services/api";
@@ -14,23 +14,47 @@ function ApprovalQueue() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const loadVehicles = useCallback(async () => {
+  // The backend has no status filter on /vehicles/admin/all, so every
+  // page must be walked to find every pending vehicle, not just page 1.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadVehicles() {
+      setLoading(true);
+      setError("");
+      try {
+        const data = await getAllAdminVehicles();
+        if (!cancelled) setVehicles(data);
+      } catch (err) {
+        if (!cancelled) {
+          setVehicles([]);
+          setError(getErrorMessage(err));
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadVehicles();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function refreshVehicles() {
     setLoading(true);
     setError("");
     try {
-      const data = await getAdminVehicles();
-      setVehicles(Array.isArray(data) ? data : data?.items || []);
+      const data = await getAllAdminVehicles();
+      setVehicles(data);
     } catch (err) {
       setVehicles([]);
       setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  useEffect(() => {
-    loadVehicles();
-  }, [loadVehicles]);
+  }
 
   const pendingQueue = useMemo(
     () => vehicles.filter((v) => getVehicleApprovalStatus(v) === "pending"),
@@ -43,7 +67,7 @@ function ApprovalQueue() {
       setError("");
       await approveVehicle(id);
       setMessage("Vehicle approved successfully.");
-      await loadVehicles();
+      await refreshVehicles();
     } catch (err) {
       setError(getErrorMessage(err));
     }
@@ -55,7 +79,7 @@ function ApprovalQueue() {
       setError("");
       await rejectVehicle(id);
       setMessage("Vehicle rejected successfully.");
-      await loadVehicles();
+      await refreshVehicles();
     } catch (err) {
       setError(getErrorMessage(err));
     }

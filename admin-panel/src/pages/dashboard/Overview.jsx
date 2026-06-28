@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import { getAdminVehicles, getErrorMessage } from "../../services/api";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getAdminDashboardStats, getErrorMessage } from "../../services/api";
 import { getUserFromToken } from "../../utils/jwt";
-import { getVehicleApprovalStatus } from "../../utils/vehicleApproval";
 
 function StatCard({ label, value, accent = "text-slate-900 dark:text-white" }) {
   return (
@@ -16,7 +16,7 @@ function StatCard({ label, value, accent = "text-slate-900 dark:text-white" }) {
 
 function Overview() {
   const user = getUserFromToken();
-  const [vehicles, setVehicles] = useState([]);
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -27,13 +27,13 @@ function Overview() {
       setLoading(true);
       setError("");
       try {
-        const data = await getAdminVehicles();
+        const data = await getAdminDashboardStats();
         if (!cancelled) {
-          setVehicles(Array.isArray(data) ? data : data?.items || []);
+          setStats(data);
         }
       } catch (err) {
         if (!cancelled) {
-          setVehicles([]);
+          setStats(null);
           setError(getErrorMessage(err));
         }
       } finally {
@@ -46,17 +46,6 @@ function Overview() {
       cancelled = true;
     };
   }, []);
-
-  const stats = useMemo(() => {
-    const counts = { total: vehicles.length, approved: 0, pending: 0, rejected: 0 };
-    vehicles.forEach((vehicle) => {
-      const status = getVehicleApprovalStatus(vehicle);
-      if (status === "approved") counts.approved += 1;
-      if (status === "pending") counts.pending += 1;
-      if (status === "rejected") counts.rejected += 1;
-    });
-    return counts;
-  }, [vehicles]);
 
   if (loading) {
     return (
@@ -83,12 +72,78 @@ function Overview() {
           </div>
         )}
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard label="Total Vehicles" value={stats.total} />
-          <StatCard label="Approved" value={stats.approved} accent="text-emerald-600 dark:text-emerald-400" />
-          <StatCard label="Pending" value={stats.pending} accent="text-amber-600 dark:text-amber-400" />
-          <StatCard label="Rejected" value={stats.rejected} accent="text-red-600 dark:text-red-400" />
-        </div>
+        {stats && (
+          <>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <StatCard label="Total Users" value={stats.total_users} />
+              <StatCard
+                label="Customers"
+                value={stats.total_customers}
+                accent="text-sky-600 dark:text-sky-400"
+              />
+              <StatCard
+                label="Vendors"
+                value={stats.total_vendors}
+                accent="text-purple-600 dark:text-purple-400"
+              />
+              <StatCard
+                label="Total Bookings"
+                value={stats.total_bookings}
+                accent="text-orange-600 dark:text-orange-400"
+              />
+            </div>
+
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <StatCard label="Total Vehicles" value={stats.total_vehicles} />
+              <StatCard
+                label="Approved"
+                value={stats.approved_vehicles}
+                accent="text-emerald-600 dark:text-emerald-400"
+              />
+              <StatCard
+                label="Pending"
+                value={stats.pending_vehicles}
+                accent="text-amber-600 dark:text-amber-400"
+              />
+              <StatCard
+                label="Total Revenue"
+                value={`PKR ${Number(stats.total_revenue ?? 0).toLocaleString()}`}
+                accent="text-emerald-600 dark:text-emerald-400"
+              />
+            </div>
+          </>
+        )}
+      </section>
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <Link
+          to="/dashboard/queue"
+          className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-orange-500/50 dark:border-slate-800 dark:bg-slate-900"
+        >
+          <p className="font-semibold text-slate-900 dark:text-white">Approval Queue</p>
+          <p className="mt-1 text-sm text-slate-500">Review pending vehicles</p>
+        </Link>
+        <Link
+          to="/dashboard/payouts"
+          className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-orange-500/50 dark:border-slate-800 dark:bg-slate-900"
+        >
+          <p className="font-semibold text-slate-900 dark:text-white">Vendor Payouts</p>
+          <p className="mt-1 text-sm text-slate-500">Approve withdrawal requests</p>
+        </Link>
+        <Link
+          to="/dashboard/analytics"
+          className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-orange-500/50 dark:border-slate-800 dark:bg-slate-900"
+        >
+          <p className="font-semibold text-slate-900 dark:text-white">Analytics</p>
+          <p className="mt-1 text-sm text-slate-500">Platform-wide trends</p>
+        </Link>
+        <Link
+          to="/dashboard/reviews"
+          className="rounded-xl border border-slate-200 bg-white p-5 transition hover:border-orange-500/50 dark:border-slate-800 dark:bg-slate-900"
+        >
+          <p className="font-semibold text-slate-900 dark:text-white">Reviews</p>
+          <p className="mt-1 text-sm text-slate-500">Moderate vehicle reviews</p>
+        </Link>
       </section>
     </div>
   );

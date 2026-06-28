@@ -88,9 +88,29 @@ export async function loginUser(email, password) {
   return response.data;
 }
 
-export async function getAdminVehicles() {
-  const response = await api.get("/vehicles/admin/all");
+export async function getAdminVehicles({ page = 1, limit = 10 } = {}) {
+  const response = await api.get("/vehicles/admin/all", { params: { page, limit } });
   return response.data;
+}
+
+/**
+ * Walks every page of /vehicles/admin/all and returns the full inventory.
+ * Needed for views (like the approval queue) that must consider every
+ * vehicle regardless of status, since the backend has no status filter.
+ */
+export async function getAllAdminVehicles() {
+  const limit = 100;
+  const first = await getAdminVehicles({ page: 1, limit });
+  const items = Array.isArray(first) ? first : first?.items || [];
+  const totalPages = first?.pages ?? 1;
+
+  let all = [...items];
+  for (let page = 2; page <= totalPages; page += 1) {
+    const data = await getAdminVehicles({ page, limit });
+    all = all.concat(Array.isArray(data) ? data : data?.items || []);
+  }
+
+  return all;
 }
 
 export async function approveVehicle(id) {
@@ -100,6 +120,66 @@ export async function approveVehicle(id) {
 
 export async function rejectVehicle(id) {
   const response = await api.patch(`/vehicles/${id}/reject`);
+  return response.data;
+}
+
+export async function getAdminDashboardStats() {
+  const response = await api.get("/dashboard/admin/stats");
+  return response.data;
+}
+
+export async function getAdminAnalyticsOverview(params = {}) {
+  const response = await api.get("/analytics/admin/overview", { params });
+  return response.data;
+}
+
+export async function getAdminAnalyticsRevenue(params = {}) {
+  const response = await api.get("/analytics/admin/revenue", { params });
+  return response.data;
+}
+
+export async function getAdminAnalyticsBookings(params = {}) {
+  const response = await api.get("/analytics/admin/bookings", { params });
+  return response.data;
+}
+
+export async function getAdminTopVehicles(params = {}) {
+  const response = await api.get("/analytics/admin/top-vehicles", { params });
+  return response.data;
+}
+
+export async function getAdminTopVendors(params = {}) {
+  const response = await api.get("/analytics/admin/top-vendors", { params });
+  return response.data;
+}
+
+export async function getAdminPayouts() {
+  const response = await api.get("/admin/payouts");
+  return response.data;
+}
+
+export async function approvePayout(id) {
+  const response = await api.patch(`/admin/payouts/${id}/approve`);
+  return response.data;
+}
+
+export async function rejectPayout(id) {
+  const response = await api.patch(`/admin/payouts/${id}/reject`);
+  return response.data;
+}
+
+export async function completePayout(id) {
+  const response = await api.patch(`/admin/payouts/${id}/complete`);
+  return response.data;
+}
+
+export async function getVehicleReviews(vehicleId) {
+  const response = await api.get(`/vehicles/${vehicleId}/reviews`);
+  return response.data;
+}
+
+export async function deleteReview(reviewId) {
+  const response = await api.delete(`/reviews/${reviewId}`);
   return response.data;
 }
 

@@ -118,4 +118,29 @@ export async function getVendorBookings() {
   return response.data;
 }
 
+export async function getMyConversations() {
+  const response = await api.get("/conversations/my");
+  return response.data;
+}
+
+export async function getConversation(conversationId) {
+  const response = await api.get(`/conversations/${conversationId}`);
+  return response.data;
+}
+
+export async function getConversationMessages(conversationId) {
+  const response = await api.get(`/conversations/${conversationId}/messages`);
+  return response.data;
+}
+
+export async function sendMessage(conversationId, data) {
+  const response = await api.post(`/conversations/${conversationId}/messages`, data);
+  return response.data;
+}
+
+export async function markMessageRead(messageId) {
+  const response = await api.patch(`/messages/${messageId}/read`);
+  return response.data;
+}
+
 export default api;

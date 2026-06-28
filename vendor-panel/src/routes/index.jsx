@@ -8,6 +8,8 @@ import Register from "../pages/Register";
 import Overview from "../pages/dashboard/Overview";
 import VehiclesPage from "../pages/dashboard/VehiclesPage";
 import BookingsPage from "../pages/dashboard/BookingsPage";
+import MessagesPage from "../pages/dashboard/MessagesPage";
+import ConversationDetailsPage from "../pages/dashboard/ConversationDetailsPage";
 import AddVehicle from "../pages/AddVehicle";
 
 function AppRoutes() {
@@ -22,6 +24,8 @@ function AppRoutes() {
           <Route path="/dashboard" element={<Overview />} />
           <Route path="/dashboard/vehicles" element={<VehiclesPage />} />
           <Route path="/dashboard/bookings" element={<BookingsPage />} />
+          <Route path="/dashboard/messages" element={<MessagesPage />} />
+          <Route path="/dashboard/messages/:id" element={<ConversationDetailsPage />} />
           <Route path="/add-vehicle" element={<AddVehicle />} />
         </Route>
       </Route>

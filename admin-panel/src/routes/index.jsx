@@ -7,6 +7,10 @@ import Login from "../pages/Login";
 import Overview from "../pages/dashboard/Overview";
 import ApprovalQueue from "../pages/dashboard/ApprovalQueue";
 import AllListings from "../pages/dashboard/AllListings";
+import PaymentsOverview from "../pages/dashboard/PaymentsOverview";
+import VendorPayouts from "../pages/dashboard/VendorPayouts";
+import AnalyticsDashboard from "../pages/dashboard/AnalyticsDashboard";
+import ReviewsModeration from "../pages/dashboard/ReviewsModeration";
 
 function AppRoutes() {
   return (
@@ -19,6 +23,10 @@ function AppRoutes() {
           <Route path="/dashboard" element={<Overview />} />
           <Route path="/dashboard/queue" element={<ApprovalQueue />} />
           <Route path="/dashboard/listings" element={<AllListings />} />
+          <Route path="/dashboard/payments" element={<PaymentsOverview />} />
+          <Route path="/dashboard/payouts" element={<VendorPayouts />} />
+          <Route path="/dashboard/analytics" element={<AnalyticsDashboard />} />
+          <Route path="/dashboard/reviews" element={<ReviewsModeration />} />
         </Route>
       </Route>
     </Routes>
