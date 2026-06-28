@@ -51,12 +51,20 @@ function Navbar({ notifications }) {
           {token ? (
             <>
               {user?.role === "customer" && (
-                <NavLink
-                  to="/saved-vehicles"
-                  className="hidden rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-500 hover:text-emerald-600 dark:border-slate-600 dark:text-slate-200 dark:hover:border-emerald-400 dark:hover:text-emerald-300 sm:inline-block"
-                >
-                  Saved Vehicles
-                </NavLink>
+                <>
+                  <NavLink
+                    to="/conversations"
+                    className="hidden rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-500 hover:text-emerald-600 dark:border-slate-600 dark:text-slate-200 dark:hover:border-emerald-400 dark:hover:text-emerald-300 sm:inline-block"
+                  >
+                    Messages
+                  </NavLink>
+                  <NavLink
+                    to="/saved-vehicles"
+                    className="hidden rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-emerald-500 hover:text-emerald-600 dark:border-slate-600 dark:text-slate-200 dark:hover:border-emerald-400 dark:hover:text-emerald-300 sm:inline-block"
+                  >
+                    Saved Vehicles
+                  </NavLink>
+                </>
               )}
               <NavLink
                 to="/dashboard"

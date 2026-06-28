@@ -1,14 +1,16 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FavoriteButton from "../components/FavoriteButton";
 import RatingStars from "../components/reviews/RatingStars";
 import ReviewForm from "../components/reviews/ReviewForm";
 import ReviewList from "../components/reviews/ReviewList";
 import {
+  createConversation,
   createReview,
   deleteReview,
   getErrorMessage,
   getMyBookings,
+  getMyConversations,
   getMyFavorites,
   getMyReviews,
   getVehicle,
@@ -27,12 +29,16 @@ function handleVehicleImageError(event) {
 
 function VehicleDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [vehicle, setVehicle] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isFavorited, setIsFavorited] = useState(false);
 
   const currentUser = getUserFromToken();
+
+  const [messaging, setMessaging] = useState(false);
+  const [messageError, setMessageError] = useState("");
 
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
@@ -247,6 +253,32 @@ function VehicleDetails() {
     };
   }, [id]);
 
+  async function handleMessageVendor() {
+    if (!vehicle) return;
+
+    setMessaging(true);
+    setMessageError("");
+
+    try {
+      const existingData = await getMyConversations();
+      const existingList = Array.isArray(existingData)
+        ? existingData
+        : existingData?.items || [];
+      const existing = existingList.find(
+        (conversation) =>
+          String(conversation.vendor_id) === String(vehicle.vendor_id) &&
+          !conversation.booking_id
+      );
+
+      const conversation = existing || (await createConversation({ vendor_id: vehicle.vendor_id }));
+      navigate(`/conversations/${conversation.id}`);
+    } catch (err) {
+      setMessageError(getErrorMessage(err));
+    } finally {
+      setMessaging(false);
+    }
+  }
+
   async function handleCreateSubmit({ rating, comment }) {
     if (!eligibleBookingId) return;
 
@@ -379,13 +411,24 @@ function VehicleDetails() {
               </p>
             </div>
 
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               <Link
                 to={`/book/${vehicle.id}`}
                 className="rounded-lg bg-emerald-500 px-6 py-3 font-semibold text-slate-950 hover:bg-emerald-400"
               >
                 Book Now
               </Link>
+
+              {currentUser?.role === "customer" && (
+                <button
+                  type="button"
+                  onClick={handleMessageVendor}
+                  disabled={messaging}
+                  className="rounded-lg border border-slate-300 px-6 py-3 font-semibold text-slate-700 transition hover:border-emerald-500 hover:text-emerald-600 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:text-slate-300 dark:hover:border-emerald-400 dark:hover:text-emerald-300"
+                >
+                  {messaging ? "Opening…" : "Message Vendor"}
+                </button>
+              )}
 
               <Link
                 to="/vehicles"
@@ -394,6 +437,10 @@ function VehicleDetails() {
                 Back
               </Link>
             </div>
+
+            {messageError && (
+              <p className="mt-3 text-sm text-red-600 dark:text-red-300">{messageError}</p>
+            )}
           </div>
         </div>
 

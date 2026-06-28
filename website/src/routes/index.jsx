@@ -12,6 +12,8 @@ import BookVehicle from "../pages/BookVehicle";
 import Dashboard from "../pages/Dashboard";
 import SavedVehicles from "../pages/SavedVehicles";
 import Notifications from "../pages/Notifications";
+import Conversations from "../pages/Conversations";
+import ConversationDetails from "../pages/ConversationDetails";
 
 function AppRoutes() {
   return (
@@ -29,6 +31,8 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/saved-vehicles" element={<SavedVehicles />} />
         <Route path="/notifications" element={<Notifications />} />
+        <Route path="/conversations" element={<Conversations />} />
+        <Route path="/conversations/:id" element={<ConversationDetails />} />
       </Route>
     </Routes>
   );
