@@ -1,0 +1,15 @@
+node_modules/
+dist/
+env/
+__pycache__/
+.env
+.DS_Store
+__MACOSX/
+
+# Nested/generated artifacts in subprojects
+**/node_modules/
+**/dist/
+**/env/
+**/__pycache__/
+**/.DS_Store
+**/__MACOSX/

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/Users/apple/Desktop/RideNest/backend/env/bin/pip list *)",
+      "Bash(psql -l)",
+      "Bash(mkdir -p /private/tmp/claude-501/-Users-apple-Desktop-RideNest/878c9c47-a877-495d-97fc-e531fdc0e5a0/scratchpad)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s -m 2 http://127.0.0.1:8123/)",
+      "Bash(break)",
+      "Bash(curl -s \"http://127.0.0.1:8001/vehicles/\")",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s \"http://127.0.0.1:8001/vehicles/?page=2&limit=5\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://127.0.0.1:8001/vehicles/?limit=500\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://127.0.0.1:8001/vehicles/?page=0\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://127.0.0.1:8001/vehicles/1\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" -m 3 http://127.0.0.1:8001/)",
+      "Bash(curl -s -o /dev/null -w \"root: %{http_code}\\\\n\" -m 3 http://127.0.0.1:8001/)"
+    ]
+  }
+}
