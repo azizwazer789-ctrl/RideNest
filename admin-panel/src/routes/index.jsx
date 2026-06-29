@@ -11,6 +11,7 @@ import PaymentsOverview from "../pages/dashboard/PaymentsOverview";
 import VendorPayouts from "../pages/dashboard/VendorPayouts";
 import AnalyticsDashboard from "../pages/dashboard/AnalyticsDashboard";
 import ReviewsModeration from "../pages/dashboard/ReviewsModeration";
+import AddOnsPage from "../pages/dashboard/AddOnsPage";
 
 function AppRoutes() {
   return (
@@ -27,6 +28,7 @@ function AppRoutes() {
           <Route path="/dashboard/payouts" element={<VendorPayouts />} />
           <Route path="/dashboard/analytics" element={<AnalyticsDashboard />} />
           <Route path="/dashboard/reviews" element={<ReviewsModeration />} />
+          <Route path="/dashboard/addons" element={<AddOnsPage />} />
         </Route>
       </Route>
     </Routes>

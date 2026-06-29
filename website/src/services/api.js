@@ -98,6 +98,11 @@ export async function getVehicles() {
   return response.data;
 }
 
+export async function getActiveAddOns() {
+  const response = await api.get("/addons");
+  return response.data;
+}
+
 export async function getVehicle(id) {
   const response = await api.get(`/vehicles/${id}`);
   return response.data;
@@ -115,6 +120,11 @@ export async function getMyBookings() {
 
 export async function cancelBooking(id) {
   const response = await api.patch(`/bookings/${id}/cancel`);
+  return response.data;
+}
+
+export async function rescheduleBooking(id, data) {
+  const response = await api.patch(`/bookings/${id}/reschedule`, data);
   return response.data;
 }
 

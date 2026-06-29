@@ -183,4 +183,29 @@ export async function deleteReview(reviewId) {
   return response.data;
 }
 
+export async function getAdminAddOns() {
+  const response = await api.get("/addons/admin/all");
+  return response.data;
+}
+
+export async function createAddOn(data) {
+  const response = await api.post("/addons", data);
+  return response.data;
+}
+
+export async function updateAddOn(id, data) {
+  const response = await api.put(`/addons/${id}`, data);
+  return response.data;
+}
+
+export async function toggleAddOn(id) {
+  const response = await api.patch(`/addons/${id}/toggle`);
+  return response.data;
+}
+
+export async function deleteAddOn(id) {
+  const response = await api.delete(`/addons/${id}`);
+  return response.data;
+}
+
 export default api;

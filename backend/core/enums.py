@@ -74,6 +74,13 @@ class PayoutStatus(str, enum.Enum):
     completed = "completed"
 
 
+class AddOnPricingType(str, enum.Enum):
+    """How an add-on's price is applied to a booking."""
+
+    fixed = "fixed"
+    per_day = "per_day"
+
+
 class NotificationType(str, enum.Enum):
     """Categories of in-app notifications."""
 
@@ -82,6 +89,7 @@ class NotificationType(str, enum.Enum):
     booking_rejected = "booking_rejected"
     booking_cancelled = "booking_cancelled"
     booking_completed = "booking_completed"
+    booking_rescheduled = "booking_rescheduled"
     vehicle_approved = "vehicle_approved"
     vehicle_rejected = "vehicle_rejected"
     review_received = "review_received"

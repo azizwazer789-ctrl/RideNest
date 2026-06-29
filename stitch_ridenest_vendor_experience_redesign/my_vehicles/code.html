@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RideNest - My Vehicles</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed-dim": "#b4c5ff",
+                    "surface": "#faf8ff",
+                    "primary-container": "#2563eb",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "surface-container": "#ededf9",
+                    "on-primary-container": "#eeefff",
+                    "on-surface": "#191b23",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "error": "#ba1a1a",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "primary": "#004ac6",
+                    "surface-tint": "#0053db",
+                    "on-error": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#2e3039",
+                    "secondary-container": "#dae2fd",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-secondary": "#ffffff",
+                    "background": "#faf8ff",
+                    "tertiary-fixed": "#ffdbcd",
+                    "outline": "#737686",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container-highest": "#e1e2ed",
+                    "surface-container-low": "#f3f3fe",
+                    "on-surface-variant": "#434655",
+                    "tertiary": "#943700",
+                    "on-tertiary-container": "#ffede6",
+                    "on-error-container": "#93000a",
+                    "on-background": "#191b23",
+                    "on-primary-fixed": "#00174b",
+                    "outline-variant": "#c3c6d7",
+                    "secondary-fixed": "#dae2fd",
+                    "surface-bright": "#faf8ff",
+                    "inverse-on-surface": "#f0f0fb",
+                    "tertiary-container": "#bc4800",
+                    "secondary": "#565e74",
+                    "inverse-primary": "#b4c5ff",
+                    "surface-container-high": "#e7e7f3",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-tertiary-fixed": "#360f00",
+                    "surface-variant": "#e1e2ed",
+                    "on-secondary-container": "#5c647a",
+                    "surface-dim": "#d9d9e5",
+                    "on-secondary-fixed": "#131b2e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "gutter": "24px",
+                    "container-padding-mobile": "16px",
+                    "stack-lg": "24px",
+                    "container-padding": "32px",
+                    "base": "8px",
+                    "sidebar-width": "260px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+        .active-nav-indicator {
+            position: absolute;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: #004ac6;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar (The Anchor) -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-stack-lg z-50">
+<div class="px-6 mb-10">
+<h1 class="font-display-lg text-display-lg font-bold text-primary tracking-tight">RideNest</h1>
+<p class="font-body-sm text-on-surface-variant opacity-70">Fleet Management</p>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<!-- Active Tab: My Vehicles -->
+<a class="flex items-center gap-3 px-6 py-3 text-primary bg-primary-container/10 border-l-4 border-primary font-bold font-body-md transition-transform active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+                My Vehicles
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">event_note</span>
+                Bookings
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">chat</span>
+                Messages
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">star</span>
+                Reviews
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">payments</span>
+                Earnings
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+                Calendar
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+                Add Vehicle
+            </a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors font-body-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto px-6 border-t border-outline-variant pt-6">
+<button class="flex items-center gap-3 text-on-surface-variant hover:text-error transition-colors font-body-md w-full">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </button>
+</div>
+</aside>
+<!-- TopNavBar (The Shell) -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-container-padding z-40">
+<div class="flex items-center gap-4 flex-grow max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg py-2 pl-10 pr-4 font-body-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Search vehicles by name, plate, or location..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right hidden sm:block">
+<p class="font-label-caps text-on-surface font-bold">ALEX RIVERA</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Fleet Owner</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-outline-variant object-cover group-hover:ring-2 group-hover:ring-primary transition-all" data-alt="A professional headshot of a Hispanic male fleet manager in his early 30s, wearing a clean white linen shirt, smiling confidently. The lighting is bright and natural with a soft-focus background of a modern architectural office space. The image maintains a high-end SaaS professional aesthetic with cool blue and white tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKLi7_qiQ87AUaUQ10TlaBBlkhgH1ptjCS8yr2fRTCh6OsGmYRNN15q0nXrYsz5TdgLpVKmTqTYTuiA9G0xFAThLz_3j0pYBKlVTqYJvxXe3cYz-_S4pDPbpKj7QRMQTyapaGp8bNMRuwhfMVW2_G5jeS082kyBKRcuvT4paRgoQCZQwP-bg93KIzPtljOQ_2dUaGLuIBfnHFwdhEpmrEnkwyeM0r-ct4eS_MCSfB5-MsDuDQBMg_iO7-yfXuV2th-nmGKxo7sL7U"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-16 min-h-screen">
+<div class="p-container-padding max-w-[1400px] mx-auto">
+<!-- Page Header & Controls -->
+<div class="flex flex-col gap-6 mb-8">
+<div class="flex justify-between items-end">
+<div>
+<nav class="flex items-center gap-2 text-on-surface-variant font-label-caps mb-2">
+<span>Fleet</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">My Vehicles</span>
+</nav>
+<h2 class="font-headline-md text-headline-md text-on-surface">Vehicle Management</h2>
+<p class="font-body-sm text-on-surface-variant mt-1">Manage and monitor 12 active vehicles in your marketplace fleet.</p>
+</div>
+<button class="bg-primary hover:bg-on-primary-fixed-variant text-white px-6 py-3 rounded-lg flex items-center gap-2 font-body-md font-bold transition-all active:scale-[0.98] shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">add</span>
+                        Add Vehicle
+                    </button>
+</div>
+<!-- Filters Bar -->
+<div class="bg-white border border-outline-variant rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-low rounded-lg border border-outline-variant text-on-surface-variant cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+<span class="font-body-sm font-medium">Status: All</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-low rounded-lg border border-outline-variant text-on-surface-variant cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+<span class="font-body-sm font-medium">Type: Luxury</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-container-low rounded-lg border border-outline-variant text-on-surface-variant cursor-pointer hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">sort</span>
+<span class="font-body-sm font-medium">Sort by: Newest</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</div>
+</div>
+<div class="flex items-center bg-surface-container-low rounded-lg p-1 border border-outline-variant">
+<button class="p-2 bg-white text-primary rounded-md shadow-sm border border-outline-variant/50">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">format_list_bulleted</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Vehicles Grid (Bento Layout Inspired) -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Vehicle Card 1 -->
+<div class="bg-white rounded-xl border border-outline-variant overflow-hidden group hover:border-primary transition-all custom-shadow">
+<div class="relative aspect-[16/9] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A sleek 2023 Tesla Model 3 in pearl white multi-coat parked in front of a minimalist concrete architecture building. The lighting is golden hour, highlighting the car's aerodynamic lines. Professional automotive photography style, clean reflections, and a premium luxury feel with soft shadows and high-end color grading." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDae6NuaS5KNL3S64xOt6NV_giffi6Zs48gfG11sqI6_hYzShBRl4Pvva1qyfnWx_y22VdQG49PChi8Plm6gf4zElJ1uR4dYQ-y1i-jthPuDhJpDu1UINcVkg1ZKle5AS4yPD0P5spXvp-xQ8LVFWL-jyS4NCtOLUmKwxP85qmEfmCltIWnpML1eFuZwpXFU8BoYmMHZ-GSXfQsDn2NDAsl_NHtTaTjZ7YbHCrmAWrs4zL7hHfQjA1xymIjBXSonA1UnjKtU2JzlMI"/>
+<div class="absolute top-4 left-4">
+<span class="bg-[#f0fdf4] text-[#16a34a] font-label-caps px-3 py-1 rounded-full border border-[#bbf7d0] shadow-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#22c55e]"></span>
+                                APPROVED
+                            </span>
+</div>
+<div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-white/90 backdrop-blur-sm p-2 rounded-full text-on-surface-variant hover:text-primary shadow-lg">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<div class="p-stack-lg">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold group-hover:text-primary transition-colors">Tesla Model 3</h3>
+<p class="font-body-sm text-on-surface-variant">Performance AWD • 2023</p>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-primary font-extrabold text-[20px]">$145<span class="text-body-sm font-normal text-on-surface-variant">/day</span></p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-outline-variant/30 my-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">settings_input_component</span>
+<span class="font-body-sm">Automatic</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">ev_station</span>
+<span class="font-body-sm">Electric</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">location_on</span>
+<span class="font-body-sm">Los Angeles, CA</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary text-[20px]">star</span>
+<span class="font-body-sm font-bold">4.9 <span class="font-normal opacity-60">(128)</span></span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-grow bg-surface-container-low hover:bg-primary hover:text-white border border-outline-variant py-2.5 rounded-lg font-body-sm font-bold text-on-surface-variant transition-all">View Details</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-error hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 2 -->
+<div class="bg-white rounded-xl border border-outline-variant overflow-hidden group hover:border-primary transition-all custom-shadow">
+<div class="relative aspect-[16/9] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A powerful 2022 Porsche 911 Carrera in guards red, shot in a high-contrast studio setting with dramatic top-down lighting creating sharp shadows and bright highlights on the curves. Professional showroom photography style, focusing on the precision engineering and high-end automotive luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj-HtpiiReBgJDz33Mo556zoxDvqo-bRq4Qf_8BODbwtXdHvlYmsWMxjVAUDYRnjutrYUuzKgI8KgBBWSKPc4WRw4rZONkrmJC2wXIyqN_YQ_DQ8vCmEUVg98K7g_g53eCT_dtgsEfv4aN9rGmdxMSML0Ks96TImBngcMX87MdeFKIB2y1T4wHQrOqa9AmFm0fTl9NAf-aB09QVTZHYkw_yQJfCSaYxTDOJFrXaROLs2gBpgg6iB-kUl7TCCfbXZSwBYE7zdkVko8"/>
+<div class="absolute top-4 left-4">
+<span class="bg-[#fffbeb] text-[#d97706] font-label-caps px-3 py-1 rounded-full border border-[#fef3c7] shadow-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#f59e0b]"></span>
+                                PENDING
+                            </span>
+</div>
+</div>
+<div class="p-stack-lg">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold group-hover:text-primary transition-colors">Porsche 911 Carrera</h3>
+<p class="font-body-sm text-on-surface-variant">Sport Coupe • 2022</p>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-primary font-extrabold text-[20px]">$320<span class="text-body-sm font-normal text-on-surface-variant">/day</span></p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-outline-variant/30 my-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">settings_input_component</span>
+<span class="font-body-sm">PDK Auto</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">local_gas_station</span>
+<span class="font-body-sm">Premium</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">location_on</span>
+<span class="font-body-sm">Beverly Hills, CA</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary text-[20px]">star</span>
+<span class="font-body-sm font-bold">5.0 <span class="font-normal opacity-60">(42)</span></span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-grow bg-surface-container-low hover:bg-primary hover:text-white border border-outline-variant py-2.5 rounded-lg font-body-sm font-bold text-on-surface-variant transition-all">View Details</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-error hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Vehicle Card 3 -->
+<div class="bg-white rounded-xl border border-outline-variant overflow-hidden group hover:border-primary transition-all custom-shadow">
+<div class="relative aspect-[16/9] overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A modern 2023 BMW X5 M Competition in matte black finish, parked on a wet urban street at night with neon city lights reflecting off the surface. High-end lifestyle automotive photography with a moody, sophisticated atmosphere. Dark blue and purple tones dominate the scene, emphasizing the car's aggressive luxury SUV profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIZ8sr3dlNZoXp4k5oSMq_m26PY8riQlXJZJucpZpkYO4Sel5W_hNhGj68Bz53_2jhMnM3w2TqaCdpYp6_-nmTAxoCY1ecPfTRvBfaXzvj7GveEUa-HV3xqyXoMsTt84qeUCpJBjmqqvhKf-SyJfSWOA7K7vxUbbkkmCC4ENwQO4uuJTdNk9ut75NJhWgs8BsYE9DVIqa0CT6dLpQz24mAtAE0OYVDhuuUOZM71YB7Ba-VEh0XEIySqxTu0qFldU8xVu-kXZAztKk"/>
+<div class="absolute top-4 left-4">
+<span class="bg-[#f0fdf4] text-[#16a34a] font-label-caps px-3 py-1 rounded-full border border-[#bbf7d0] shadow-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#22c55e]"></span>
+                                APPROVED
+                            </span>
+</div>
+</div>
+<div class="p-stack-lg">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold group-hover:text-primary transition-colors">BMW X5 M</h3>
+<p class="font-body-sm text-on-surface-variant">Competition SUV • 2023</p>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-primary font-extrabold text-[20px]">$185<span class="text-body-sm font-normal text-on-surface-variant">/day</span></p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 py-4 border-y border-outline-variant/30 my-4">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">settings_input_component</span>
+<span class="font-body-sm">Automatic</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">local_gas_station</span>
+<span class="font-body-sm">Premium</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] opacity-60">location_on</span>
+<span class="font-body-sm">San Francisco, CA</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary text-[20px]">star</span>
+<span class="font-body-sm font-bold">4.8 <span class="font-normal opacity-60">(95)</span></span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-grow bg-surface-container-low hover:bg-primary hover:text-white border border-outline-variant py-2.5 rounded-lg font-body-sm font-bold text-on-surface-variant transition-all">View Details</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+<button class="p-2.5 border border-outline-variant rounded-lg text-on-surface-variant hover:border-error hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Professional Empty State (Hidden for demonstration) -->
+<div class="hidden flex-col items-center justify-center py-24 text-center" id="empty-state">
+<div class="w-24 h-24 bg-surface-container rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-[48px] text-outline">directions_car</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">No vehicles found</h3>
+<p class="font-body-md text-on-surface-variant max-w-sm mt-2">We couldn't find any vehicles matching your search criteria. Try adjusting your filters or add a new vehicle to your fleet.</p>
+<div class="flex gap-4 mt-8">
+<button class="bg-primary text-white px-6 py-3 rounded-lg font-bold">Add Your First Vehicle</button>
+<button class="bg-white border border-outline-variant px-6 py-3 rounded-lg font-bold text-on-surface-variant">Clear All Filters</button>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-12 flex items-center justify-between border-t border-outline-variant pt-6">
+<p class="font-body-sm text-on-surface-variant">Showing <span class="font-bold text-on-surface">1 - 9</span> of <span class="font-bold text-on-surface">12</span> vehicles</p>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-primary text-white font-bold text-body-sm">1</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant text-on-surface-variant font-medium text-body-sm hover:bg-surface-container transition-colors">2</button>
+<button class="p-2 rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interactions Script -->
+<script>
+        // Simple search feedback
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('input', (e) => {
+            const grid = document.querySelector('.grid');
+            const emptyState = document.getElementById('empty-state');
+            
+            if(e.target.value.toLowerCase() === 'empty') {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                grid.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+            }
+        });
+
+        // Tooltip or feedback logic for action buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if(this.classList.contains('active:scale-[0.98]')) {
+                    // Visual click feedback already handled by CSS
+                }
+            });
+        });
+    </script>
+</body></html>

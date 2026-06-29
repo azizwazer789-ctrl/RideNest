@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RideNest | Earnings Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#b4c5ff",
+                        "surface": "#faf8ff",
+                        "primary-container": "#2563eb",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-container": "#ededf9",
+                        "on-primary-container": "#eeefff",
+                        "on-surface": "#191b23",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary": "#004ac6",
+                        "surface-tint": "#0053db",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2e3039",
+                        "secondary-container": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "outline": "#737686",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#e1e2ed",
+                        "surface-container-low": "#f3f3fe",
+                        "on-surface-variant": "#434655",
+                        "tertiary": "#943700",
+                        "on-tertiary-container": "#ffede6",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191b23",
+                        "on-primary-fixed": "#00174b",
+                        "outline-variant": "#c3c6d7",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-bright": "#faf8ff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "tertiary-container": "#bc4800",
+                        "secondary": "#565e74",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e7f3",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-variant": "#e1e2ed",
+                        "on-secondary-container": "#5c647a",
+                        "surface-dim": "#d9d9e5",
+                        "on-secondary-fixed": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "container-padding-mobile": "16px",
+                        "stack-lg": "24px",
+                        "container-padding": "32px",
+                        "base": "8px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-stack-lg z-50">
+<div class="px-6 mb-8">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">RideNest</h1>
+<p class="text-on-surface-variant font-label-caps text-label-caps tracking-widest mt-1">FLEET MANAGEMENT</p>
+</div>
+<nav class="flex-1 overflow-y-auto custom-scrollbar px-2 space-y-1">
+<!-- Nav Items Mapping -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+<span class="font-body-md text-body-md">My Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+<span class="font-body-md text-body-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-body-md text-body-md">Messages</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+<span class="font-body-md text-body-md">Reviews</span>
+</a>
+<!-- Active State: Earnings -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary bg-primary-container/10 border-l-4 border-primary font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="payments" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-body-md text-body-md">Earnings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Calendar</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-body-md text-body-md">Add Vehicle</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pt-4 border-t border-outline-variant">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-container-padding z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-body-sm focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="Search transactions, bookings..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all relative">
+<span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-primary" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="flex items-center gap-3 ml-4 pl-4 border-l border-outline-variant">
+<div class="text-right">
+<p class="font-label-caps text-label-caps text-on-surface font-bold">ALEX RIDER</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Fleet Owner</p>
+</div>
+<img class="w-10 h-10 rounded-full border border-outline-variant object-cover" data-alt="A professional headshot of a middle-aged entrepreneur in a tailored navy blazer, smiling confidently against a minimalist white studio background. The lighting is bright and clean, typical of a high-end corporate profile, reflecting a trustworthy and successful persona in a modern financial context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7Gj_HXuGRkCwUdLMO9IPR8IwI8C2TcNoqbCVJsajTGzZjOJg7ZUUJ_XNOP_RkVbbpFHwbmvfXZPiKQ6h-eCfPF8-d69fkAHOCjoELPNhnXx8NvaAGzsFvB4pr8pZOtye2RcxSfx-HEsKAgnuJ8XV0YWYXwd9BOMdJGqJlWu85m-jFjigOyAlehOb_mMDNtxy2Bsot6IkOTcHTFT7ZsztOu9V5uPi8eRGh0Ar3dQrgnneJ-zEvuyGI9uIYIEa5PctXQpE3-RMOneI"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[260px] pt-16 p-container-padding">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Page Header -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Financial Earnings</h2>
+<p class="text-on-surface-variant font-body-md text-body-md mt-1">Manage your fleet's revenue, pending payouts, and transaction history.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-body-md text-body-md font-semibold hover:bg-primary-container transition-all flex items-center gap-2 shadow-lg shadow-primary/20 active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+                    Withdraw Funds
+                </button>
+</div>
+<!-- Bento Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-surface border border-outline-variant p-6 rounded-xl flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="p-3 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined" data-icon="monetization_on">monetization_on</span>
+</span>
+<span class="text-body-sm font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">+12.5%</span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">Total Earnings</p>
+<h3 class="font-display-lg text-display-lg text-on-surface mt-1">$42,850.40</h3>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-6 rounded-xl flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="p-3 bg-tertiary/10 rounded-lg text-tertiary">
+<span class="material-symbols-outlined" data-icon="hourglass_empty">hourglass_empty</span>
+</span>
+<span class="text-body-sm font-semibold text-on-surface-variant">Next: Aug 15</span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">Pending Payout</p>
+<h3 class="font-display-lg text-display-lg text-on-surface mt-1">$3,120.00</h3>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-6 rounded-xl flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="p-3 bg-secondary/10 rounded-lg text-secondary">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</span>
+<span class="text-body-sm font-semibold text-on-surface-variant">July 31, 2023</span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">Last Payout</p>
+<h3 class="font-display-lg text-display-lg text-on-surface mt-1">$5,840.12</h3>
+</div>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Bar Chart: Monthly Revenue -->
+<div class="bg-surface border border-outline-variant p-8 rounded-xl shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline-md text-headline-md text-on-surface">Monthly Revenue</h4>
+<div class="flex gap-2">
+<button class="text-body-sm px-3 py-1 bg-surface-container-low rounded-lg border border-outline-variant">2023</button>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+<div class="h-[300px]">
+<canvas id="monthlyRevenueChart"></canvas>
+</div>
+</div>
+<!-- Line Chart: Weekly Trends -->
+<div class="bg-surface border border-outline-variant p-8 rounded-xl shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline-md text-headline-md text-on-surface">Weekly Trends</h4>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-primary rounded-full"></span>
+<span class="text-body-sm text-on-surface-variant">Current</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-outline-variant rounded-full"></span>
+<span class="text-body-sm text-on-surface-variant">Previous</span>
+</div>
+</div>
+</div>
+<div class="h-[300px]">
+<canvas id="weeklyTrendChart"></canvas>
+</div>
+</div>
+</div>
+<!-- Transaction History Table -->
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<h4 class="font-headline-md text-headline-md text-on-surface">Transaction History</h4>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg text-body-sm hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                            Filter
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 border border-outline-variant rounded-lg text-body-sm hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+                            Export
+                        </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase">Date</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase">Type / Description</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase">Status</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant tracking-wider uppercase text-right">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<p class="text-body-sm font-semibold text-on-surface">Aug 08, 2023</p>
+<p class="text-[12px] text-on-surface-variant">10:45 AM</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="directions_car">directions_car</span>
+</div>
+<div>
+<p class="text-body-sm font-semibold text-on-surface">Booking #RN-9482</p>
+<p class="text-[12px] text-on-surface-variant">Tesla Model 3 • 3 Days Rental</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-50 text-green-700 font-label-caps text-label-caps font-bold">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                        PAID
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<p class="text-body-sm font-bold text-on-surface">+$420.00</p>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<p class="text-body-sm font-semibold text-on-surface">Aug 06, 2023</p>
+<p class="text-[12px] text-on-surface-variant">02:15 PM</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<p class="text-body-sm font-semibold text-on-surface">Booking #RN-9477</p>
+<p class="text-[12px] text-on-surface-variant">Porsche Taycan • 1 Day Rental</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-label-caps text-label-caps font-bold">
+<span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                        PENDING
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<p class="text-body-sm font-bold text-on-surface">+$850.00</p>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<p class="text-body-sm font-semibold text-on-surface">Aug 05, 2023</p>
+<p class="text-[12px] text-on-surface-variant">09:00 AM</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]" data-icon="receipt_long">receipt_long</span>
+</div>
+<div>
+<p class="text-body-sm font-semibold text-on-surface">Withdrawal • WDR-0023</p>
+<p class="text-[12px] text-on-surface-variant">Transferred to Bank Account</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-50 text-green-700 font-label-caps text-label-caps font-bold">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                        SUCCESS
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<p class="text-body-sm font-bold text-error">-$2,500.00</p>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4">
+<p class="text-body-sm font-semibold text-on-surface">Aug 03, 2023</p>
+<p class="text-[12px] text-on-surface-variant">05:30 PM</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]" data-icon="directions_car">directions_car</span>
+</div>
+<div>
+<p class="text-body-sm font-semibold text-on-surface">Booking #RN-9411</p>
+<p class="text-[12px] text-on-surface-variant">Mercedes S-Class • 2 Days Rental</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-50 text-green-700 font-label-caps text-label-caps font-bold">
+<span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                                        PAID
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<p class="text-body-sm font-bold text-on-surface">+$620.00</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-container-lowest border-t border-outline-variant flex justify-center">
+<button class="text-primary font-body-sm font-bold hover:underline">View All Transactions</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Chart Configuration
+        const commonOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#e2e8f0', drawBorder: false },
+                    ticks: { font: { family: 'Inter', size: 10 }, color: '#434655' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { family: 'Inter', size: 10 }, color: '#434655' }
+                }
+            }
+        };
+
+        // Monthly Revenue Bar Chart
+        const barCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [4200, 3800, 5600, 7200, 6800, 8400, 9100, 4850],
+                    backgroundColor: '#004ac6',
+                    borderRadius: 6,
+                    barThickness: 24,
+                }]
+            },
+            options: commonOptions
+        });
+
+        // Weekly Trends Line Chart
+        const lineCtx = document.getElementById('weeklyTrendChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    {
+                        label: 'Current Week',
+                        data: [600, 800, 550, 1100, 950, 1400, 1200],
+                        borderColor: '#004ac6',
+                        backgroundColor: 'rgba(0, 74, 198, 0.05)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#004ac6'
+                    },
+                    {
+                        label: 'Previous Week',
+                        data: [400, 600, 700, 800, 700, 1000, 900],
+                        borderColor: '#c3c6d7',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: commonOptions
+        });
+    </script>
+</body></html>

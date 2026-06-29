@@ -22,6 +22,11 @@ export function canCancelBooking(status) {
   return key === "pending" || key === "confirmed";
 }
 
+export function canRescheduleBooking(status) {
+  const key = String(status ?? "").toLowerCase();
+  return key === "pending" || key === "confirmed";
+}
+
 export function isPendingBooking(status) {
   return String(status ?? "").toLowerCase() === "pending";
 }

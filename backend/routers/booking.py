@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from dependencies.auth import require_admin, require_customer, require_vendor
 from dependencies.database import get_db
 from models.user import User
-from schemas.booking import BookingCreate, BookingResponse
+from schemas.booking import BookingCreate, BookingReschedule, BookingResponse
 from schemas.common import PaginatedResponse
 from services.booking import BookingService
 
@@ -91,6 +91,18 @@ def cancel_booking(
     """Cancel a booking owned by the authenticated customer."""
     cancelled = BookingService(db).cancel(booking_id, current_user)
     return BookingService.to_response(cancelled)
+
+
+@router.patch("/{booking_id}/reschedule", response_model=BookingResponse)
+def reschedule_booking(
+    booking_id: int,
+    payload: BookingReschedule,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_customer),
+):
+    """Reschedule a pending or confirmed booking owned by the authenticated customer."""
+    rescheduled = BookingService(db).reschedule(booking_id, payload, current_user)
+    return BookingService.to_response(rescheduled)
 
 
 @router.patch("/{booking_id}/confirm", response_model=BookingResponse)

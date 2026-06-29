@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import BookingStatusBadge from "../BookingStatusBadge";
 import VehicleThumbnail from "./VehicleThumbnail";
-import { canCancelBooking } from "../../utils/bookingStatus";
+import { canCancelBooking, canRescheduleBooking } from "../../utils/bookingStatus";
 import { formatDateRange } from "../../utils/formatDate";
 
 function CustomerBookingCard({
@@ -9,11 +9,14 @@ function CustomerBookingCard({
   vehicle,
   onCancel,
   cancellingId = null,
+  onReschedule,
 }) {
   if (!booking) return null;
 
   const showCancel =
     typeof onCancel === "function" && canCancelBooking(booking.booking_status);
+  const showReschedule =
+    typeof onReschedule === "function" && canRescheduleBooking(booking.booking_status);
   const isCancelling = cancellingId === booking.id;
 
   return (
@@ -69,6 +72,24 @@ function CustomerBookingCard({
                 {booking.dropoff_location ?? "—"}
               </p>
             </div>
+
+            {booking.addons?.length > 0 && (
+              <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Add-ons
+                </p>
+                <ul className="mt-2 space-y-1 text-sm text-slate-300">
+                  {booking.addons.map((addon) => (
+                    <li key={addon.id} className="flex items-center justify-between gap-3">
+                      <span>{addon.name}</span>
+                      <span className="text-slate-400">
+                        PKR {Number(addon.total_price).toLocaleString()}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-4 border-t border-slate-800 pt-4">
@@ -79,6 +100,11 @@ function CustomerBookingCard({
               <p className="text-2xl font-bold text-emerald-400">
                 PKR {Number(booking.total_price ?? 0).toLocaleString()}
               </p>
+              {booking.addons?.length > 0 && (
+                <p className="mt-0.5 text-xs text-slate-500">
+                  Vehicle PKR {Number(booking.vehicle_total ?? 0).toLocaleString()} + Add-ons
+                </p>
+              )}
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -88,6 +114,17 @@ function CustomerBookingCard({
               >
                 View Vehicle
               </Link>
+
+              {showReschedule && (
+                <button
+                  type="button"
+                  onClick={() => onReschedule(booking)}
+                  disabled={isCancelling}
+                  className="rounded-lg border border-emerald-500/50 px-4 py-2 text-sm font-semibold text-emerald-300 transition hover:bg-emerald-500/10 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  Reschedule Booking
+                </button>
+              )}
 
               {showCancel && (
                 <button

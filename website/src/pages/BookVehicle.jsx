@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { createBooking, getErrorMessage, getVehicle } from "../services/api";
+import AddOnSelector from "../components/AddOnSelector";
+import { createBooking, getActiveAddOns, getErrorMessage, getVehicle } from "../services/api";
 import { getUserFromToken } from "../utils/jwt";
 import { calculateRentalDays } from "../utils/rentalDays";
 
@@ -31,6 +32,11 @@ function BookVehicle() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  const [addons, setAddons] = useState([]);
+  const [addonsLoading, setAddonsLoading] = useState(true);
+  const [addonsError, setAddonsError] = useState("");
+  const [selectedAddonIds, setSelectedAddonIds] = useState(() => new Set());
 
   useEffect(() => {
     let cancelled = false;
@@ -65,12 +71,69 @@ function BookVehicle() {
     };
   }, [id]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadAddOns() {
+      setAddonsLoading(true);
+      setAddonsError("");
+
+      try {
+        const data = await getActiveAddOns();
+        if (!cancelled) {
+          setAddons(Array.isArray(data) ? data : data?.items || []);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setAddons([]);
+          setAddonsError(getErrorMessage(err));
+        }
+      } finally {
+        if (!cancelled) {
+          setAddonsLoading(false);
+        }
+      }
+    }
+
+    loadAddOns();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  function handleToggleAddon(addonId) {
+    setSelectedAddonIds((previous) => {
+      const next = new Set(previous);
+      if (next.has(addonId)) {
+        next.delete(addonId);
+      } else {
+        next.add(addonId);
+      }
+      return next;
+    });
+  }
+
   const totalDays = useMemo(
     () => calculateRentalDays(form.start_date, form.end_date),
     [form.start_date, form.end_date]
   );
 
-  const estimatedTotal = vehicle ? totalDays * Number(vehicle.price_per_day) : 0;
+  const vehicleTotal = vehicle ? totalDays * Number(vehicle.price_per_day) : 0;
+
+  const addonsTotal = useMemo(() => {
+    return addons
+      .filter((addon) => selectedAddonIds.has(addon.id))
+      .reduce((sum, addon) => {
+        const cost =
+          addon.pricing_type === "per_day"
+            ? Number(addon.price) * Math.max(totalDays, 0)
+            : Number(addon.price);
+        return sum + cost;
+      }, 0);
+  }, [addons, selectedAddonIds, totalDays]);
+
+  const estimatedTotal = vehicleTotal + addonsTotal;
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -105,6 +168,7 @@ function BookVehicle() {
         end_date: form.end_date,
         pickup_location: form.pickup_location,
         dropoff_location: form.dropoff_location,
+        addon_ids: Array.from(selectedAddonIds),
       });
 
       setMessage("Booking created successfully.");
@@ -114,6 +178,7 @@ function BookVehicle() {
         pickup_location: "",
         dropoff_location: "",
       });
+      setSelectedAddonIds(new Set());
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
@@ -370,9 +435,29 @@ function BookVehicle() {
                 </div>
               </div>
 
+              <div>
+                <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-400">
+                  Add-ons
+                </h3>
+                <p className="mt-1 text-sm text-slate-500">
+                  Optional extras for your trip.
+                </p>
+
+                <div className="mt-4">
+                  <AddOnSelector
+                    addons={addons}
+                    loading={addonsLoading}
+                    error={addonsError}
+                    selectedIds={selectedAddonIds}
+                    onToggle={handleToggleAddon}
+                    totalDays={totalDays}
+                  />
+                </div>
+              </div>
+
               <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-5 sm:p-6">
                 <h3 className="text-sm font-semibold uppercase tracking-widest text-slate-400">
-                  Booking Summary
+                  Price Breakdown
                 </h3>
 
                 <div className="mt-4 space-y-3 text-sm">
@@ -381,9 +466,15 @@ function BookVehicle() {
                     <span className="font-medium">{totalDays} day(s)</span>
                   </div>
                   <div className="flex items-center justify-between text-slate-300">
-                    <span className="text-slate-500">Daily rate</span>
+                    <span className="text-slate-500">Vehicle rental</span>
                     <span className="font-medium">
-                      PKR {Number(vehicle?.price_per_day ?? 0).toLocaleString()}
+                      PKR {vehicleTotal.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-slate-300">
+                    <span className="text-slate-500">Add-ons</span>
+                    <span className="font-medium">
+                      PKR {addonsTotal.toLocaleString()}
                     </span>
                   </div>
                   <div className="border-t border-slate-800 pt-3">

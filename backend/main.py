@@ -6,7 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware  # type: ignore[import]
 from core.config import CORS_ORIGINS
 from core.exception_handlers import register_exception_handlers
 from database.connection import Base, engine
+from models.addon import AddOn
 from models.booking import Booking
+from models.booking_addon import BookingAddOn
 from models.conversation import Conversation
 from models.earnings_ledger import EarningsLedger
 from models.favorite import Favorite
@@ -23,6 +25,7 @@ from models.vehicle_image import VehicleImage
 from models.vendor_payout import VendorPayout
 from models.vendor_wallet import VendorWallet
 from routers import (
+    addon,
     analytics,
     booking,
     conversation,
@@ -59,6 +62,7 @@ register_exception_handlers(app)
 
 app.include_router(user.router)
 app.include_router(vehicle.router)
+app.include_router(addon.router)
 app.include_router(booking.router)
 app.include_router(dashboard.router)
 app.include_router(review.router)

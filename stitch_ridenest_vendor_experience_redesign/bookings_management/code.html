@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RideNest | Bookings Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#b4c5ff",
+                        "surface": "#faf8ff",
+                        "primary-container": "#2563eb",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-container": "#ededf9",
+                        "on-primary-container": "#eeefff",
+                        "on-surface": "#191b23",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary": "#004ac6",
+                        "surface-tint": "#0053db",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2e3039",
+                        "secondary-container": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "outline": "#737686",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#e1e2ed",
+                        "surface-container-low": "#f3f3fe",
+                        "on-surface-variant": "#434655",
+                        "tertiary": "#943700",
+                        "on-tertiary-container": "#ffede6",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191b23",
+                        "on-primary-fixed": "#00174b",
+                        "outline-variant": "#c3c6d7",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-bright": "#faf8ff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "tertiary-container": "#bc4800",
+                        "secondary": "#565e74",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e7f3",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-variant": "#e1e2ed",
+                        "on-secondary-container": "#5c647a",
+                        "surface-dim": "#d9d9e5",
+                        "on-secondary-fixed": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "container-padding-mobile": "16px",
+                        "stack-lg": "24px",
+                        "container-padding": "32px",
+                        "base": "8px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface custom-scrollbar">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-stack-lg z-50">
+<div class="px-6 mb-8">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">RideNest</h1>
+<p class="text-on-surface-variant font-label-caps text-label-caps uppercase tracking-widest mt-1">Fleet Management</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+<span class="font-body-md text-body-md">My Vehicles</span>
+</a>
+<!-- Active State -->
+<a class="flex items-center gap-3 px-6 py-3 text-primary bg-primary-container/10 border-l-4 border-primary font-bold" href="#">
+<span class="material-symbols-outlined" data-icon="event_note" style="font-variation-settings: 'FILL' 1;">event_note</span>
+<span class="font-body-md text-body-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-body-md text-body-md">Messages</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+<span class="font-body-md text-body-md">Reviews</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md text-body-md">Earnings</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body-md text-body-md">Calendar</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="font-body-md text-body-md">Add Vehicle</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="flex items-center gap-3 px-6 py-3 w-full text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md text-body-md">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[260px] min-h-screen">
+<!-- Top Navbar -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-container-padding z-40">
+<div class="flex items-center bg-surface-container-low px-4 py-2 rounded-full w-96">
+<span class="material-symbols-outlined text-outline mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body-sm font-body-sm text-on-surface" placeholder="Search bookings, customers, vehicles..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all">
+<span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a fleet manager in a modern office, wearing a navy blue blazer, smiling warmly. The lighting is bright and airy with a soft bokeh background of a high-tech control room. The overall aesthetic is clean, professional, and trustworthy, matching the premium SaaS interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANi-9_3dPliPAKnSBMAt-xXFR35ApILmujurnG5Y10iDcLlanyFOuMBT0OT39RLxj3x85AyCwqTxEPKq1y3zzK_BJ11hX1ksGqvs1RcK2ZBdBQ-hBe4NThPaf9jDTIvMO8Gfi8d2XJKEv-kQAD6R6Xcf1Akd5Ic5vVC-yqYB-kkXK4QhhM86-GHXalmvi7OTEEY2ccMR1gkn29x6H9MrU5CC_oA_0Jd4fkMEQQh-Fx2xSYCZdmQeiotxD-t4S1UM0ZwWXQO5uz6Jo"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="pt-24 pb-stack-lg px-container-padding max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Bookings Management</h2>
+<p class="text-on-surface-variant font-body-md text-body-md">Monitor and manage your active vehicle rentals.</p>
+</div>
+<div class="flex gap-stack-sm">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded-lg font-body-sm text-body-sm hover:bg-surface-tint transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+                        Export List
+                    </button>
+</div>
+</div>
+<!-- Dashboard Filters & Tabs -->
+<div class="bg-surface rounded-xl border border-outline-variant overflow-hidden mb-8">
+<div class="flex border-b border-outline-variant px-6">
+<button class="px-6 py-4 font-body-md text-body-md text-primary border-b-2 border-primary font-semibold">Today</button>
+<button class="px-6 py-4 font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors">Upcoming</button>
+<button class="px-6 py-4 font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors">Completed</button>
+<button class="px-6 py-4 font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors">Cancelled</button>
+</div>
+<div class="p-6 flex flex-wrap gap-4 items-center justify-between bg-surface-container-low">
+<div class="flex gap-4 items-center">
+<select class="bg-surface border-outline-variant rounded-lg font-body-sm text-body-sm px-4 py-2 focus:ring-primary focus:border-primary">
+<option>All Vehicles</option>
+<option>Premium Sedan</option>
+<option>Luxury SUV</option>
+<option>Sport Edition</option>
+</select>
+<select class="bg-surface border-outline-variant rounded-lg font-body-sm text-body-sm px-4 py-2 focus:ring-primary focus:border-primary">
+<option>All Statuses</option>
+<option>Confirmed</option>
+<option>Pending</option>
+<option>In Progress</option>
+</select>
+</div>
+<div class="text-on-surface-variant font-label-caps text-label-caps uppercase">
+                        Showing 4 Bookings for <span class="text-on-surface font-bold">Today</span>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest text-on-surface-variant border-b border-outline-variant">
+<th class="px-6 py-4 font-label-caps text-label-caps uppercase">Customer</th>
+<th class="px-6 py-4 font-label-caps text-label-caps uppercase">Vehicle</th>
+<th class="px-6 py-4 font-label-caps text-label-caps uppercase">Rental Period</th>
+<th class="px-6 py-4 font-label-caps text-label-caps uppercase">Status</th>
+<th class="px-6 py-4 font-label-caps text-label-caps uppercase">Total</th>
+<th class="px-6 py-4 font-label-caps text-label-caps uppercase text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-background transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full overflow-hidden bg-secondary-container">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a professional-looking man in his late 30s with a sharp, clean-cut style. He is wearing a crisp white dress shirt and has a friendly, confident expression. The lighting is soft studio light, consistent with a high-end corporate profile photo." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLuoFSAAXhTQSC-TVDm3Iqvl6kJAfzl6DDsaRl8s7lh8EMumQDKOdhNHL1MX0WS2psWNpkv9oIXlSAedDm7L_DHpUSKOcEq1SMByUYTlmo8496tMi_97tg695nhCGKCUg8ILV5YX7r2YDAcUKO9iwh-GY4ThMpYUahtjcqhdxNdh4ORc6nkg852f4GSb8bNnjjWyWDzdUQhKBg_6WpMi8rBF96af4m34XgpSyr1dOD1QOsjs657VtKDohIGXsAYTFTWaTHG-vW7T0"/>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Julian Pierce</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">julian.p@example.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-16 h-10 rounded-lg overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A sleek, metallic silver 2024 luxury sedan parked on a clean, modern urban street at twilight. The car's LED headlights are faintly glowing, highlighting its aerodynamic contours. The image is captured with professional automotive photography techniques, featuring a shallow depth of field and high-end finish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDCYYRvstDFxhlBRAYnDVZhRHo4yFurRkMOU1t8PYbAkcuJtiGLdZ3_mg0vHtnhyVulrFMIFWHaV9f85CCA1lr8WdqkbDXZpO-CyPETRPOd16KBXfYac8cQvU2hVu7uogwGTFYqabNkp2DlifJj3OKRcb9gAVpgw5iTdPK53qZVo9VnLT7spHers6qmIVxVQchoGA-dgpYY5_QN7VOnKRnMhmCYJIP5Ddq_Q9tFSC86BhABFStbkFDhOGxr1ddnnDMik8S_qVrXbs"/>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Porsche Taycan 4S</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="space-y-0.5">
+<p class="font-body-sm text-body-sm text-on-surface">Oct 24 - Oct 27, 2023</p>
+<p class="font-label-caps text-[11px] text-on-surface-variant">3 DAYS</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Confirmed
+                                    </span>
+</td>
+<td class="px-6 py-5">
+<p class="font-body-md text-body-md text-on-surface font-bold">$1,450.00</p>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-primary" title="View Details">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant" title="Download Invoice">
+<span class="material-symbols-outlined" data-icon="receipt">receipt</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-background transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full overflow-hidden bg-tertiary-fixed">
+<img class="w-full h-full object-cover" data-alt="A medium shot of a stylish woman with a modern, professional look, wearing a minimalist black turtleneck. She has an approachable smile and natural lighting, giving a sense of sophisticated urban lifestyle. The background is a clean, bright architectural space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBksZc-2OoNpxCWE3wbzhIZhGQIN_4hwFhcLgV-n-JUPNJ0rMzaLFlAT6XtSs25mKqFA7kq7U_5rP7YnJM0WC0R_nMdrU3Y_0odkDnzyk8BjkH5ELSb_rHDQTRXlOhtrQzsuYhk-vZ1Xz90kgo-jRMRp0v7oIR6C5ddr6uPHSo7aA6fhB5FFUwssXokes17eq3HqWIFNFWo7lDu8IVkFb9sR6e-hVsGPOGD06E1xXAJgO8p9_W0CTeFAaApsb-3NzOFW9wSJ7_zOGM"/>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Elena Rostova</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">e.rostova@design.co</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-16 h-10 rounded-lg overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A deep midnight blue premium SUV parked in front of a modern glass-fronted villa. The lighting captures the rich paint color and the sophisticated chrome details of the vehicle. High-end lifestyle automotive photography with a focus on luxury and space." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKyU4EAHyg5pYQg3IYvTxz9iz7yVnb2-K2lwko1FgAnYJxrnoX5cLDhhRwpRR_cfhFqNS6E-5azHs5ULWbpg8q5mWD83yNsv73NkfgX8tjRCD2O4wtfWGJZK9eCO1OGuQfTL6lxanUeIkHBuJJ_-1asZrstLJXLd8wm0MUY4fuN2xCLF3OSsRNbrBWpqwZgSCftc8WnPipPdCif8nZXr3ceBT6I9NKGMcT-1xdQHT8uzK0vCgAwmj_u7iN6GFXGEkvkePPzd3cDTY"/>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Range Rover Sport</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="space-y-0.5">
+<p class="font-body-sm text-body-sm text-on-surface">Oct 24 - Oct 25, 2023</p>
+<p class="font-label-caps text-[11px] text-on-surface-variant">1 DAY</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                        Pending
+                                    </span>
+</td>
+<td class="px-6 py-5">
+<p class="font-body-md text-body-md text-on-surface font-bold">$480.00</p>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2">
+<button class="px-3 py-1 bg-primary text-on-primary rounded-lg text-xs font-bold hover:bg-surface-tint">Approve</button>
+<button class="px-3 py-1 border border-outline-variant text-on-surface-variant rounded-lg text-xs font-bold hover:bg-surface-container">Reject</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-background transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full overflow-hidden bg-primary-fixed">
+<img class="w-full h-full object-cover" data-alt="A friendly, approachable man in his late 20s with a modern casual look, wearing a well-fitted grey sweater. He has a warm smile and is set against a bright, minimalist interior background. The image has a clean, high-resolution finish typical of premium service platforms." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3p13kcDlIwfWW3xugJGL4pqglugexRZtkWO5KXdfn30DdCt0rjw2SBfZPaMzM6k1WxsQ-cdS6eshKXfhkRGoaEmvYHTSR_uxOKMDxYELyf3PCrVoEAEEOHkV7hBBpyPY9lprM5LF0hi0bm42cJgzOuFBTGf5FS4hP_I32P59A24iMyVY_9CprhSKJCGypLm2P25_lyh13g268Ubsc9FiwF-LwegE18bY9I8l5gnN51u2asKRS9VjcYt0G7q3GRUxv49HlsLrprfQ"/>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Marcus Bennett</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">m.bennett@techhub.io</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-16 h-10 rounded-lg overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A high-performance electric coupe in a vibrant matte black finish, positioned on a winding coastal road during the golden hour. The sunlight glints off the carbon fiber accents and the aggressive wheel design. The mood is powerful and adventurous, emphasizing high-performance technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfud45VdfgLLV7FlWl9CpUPEWyyOvL8f5CWa_MWzgtrmbQ_uC2byBmnACKHoZCqv7j-YOiQqcIe-5Z1zk6ZBfEvm-ATCZRfkaOpCGvSLhXhqNgz6ow4OVsoyteIlghvNBY9zfXxXo3iW0YZF9x8wyxjWxVWDTUcd8E9CzAZL9WYSyNF5BiiIFtWlMW5mqN_eo6P6sFMwnQwMZ3eUFRZtLPLc3_lzUypf9G1jPAyopi34bbHhO2Zes3xvZjpZff_Jtg6tVvN5r9rAs"/>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Audi e-tron GT</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="space-y-0.5">
+<p class="font-body-sm text-body-sm text-on-surface">Oct 24 - Oct 31, 2023</p>
+<p class="font-label-caps text-[11px] text-on-surface-variant">7 DAYS</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        In Progress
+                                    </span>
+</td>
+<td class="px-6 py-5">
+<p class="font-body-md text-body-md text-on-surface font-bold">$3,100.00</p>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-primary" title="View Details">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant" title="Download Invoice">
+<span class="material-symbols-outlined" data-icon="receipt">receipt</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-background transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full overflow-hidden bg-error-container">
+<img class="w-full h-full object-cover" data-alt="A portrait of a confident woman in a modern office environment. She has a professional yet relaxed posture, wearing a light-colored blazer. Soft, natural light enters from large windows in the background. The visual style is premium and high-end, suggesting a successful entrepreneur." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtaDC1HHnLdAE8HRbkTgFW5qzf3qEkTrGxjb122_6J9eC9UXE1yDjvZZ6TXICp9LW9hz0DxW_tpHrhK6SV61iRlo-0F9SwsJQjcRzAo_UbNRZYL5ReCjOhdkjM37ED6KNTvBCrYmI7yljShwhxfwkwXB4MbkUi6DG_yONLLz2Hmpf2q7BnOv8D2lmz7XwYAxoXfQ6GNlmnWzET4m2f1m7D_ArV7sQ-1umW_pBgfBYAPJfZMymV99Q4ygjpKwsIY6-_Ax-yj_OeuK0"/>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Sarah Chen</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">sarah.chen@global.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-16 h-10 rounded-lg overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A pristine white convertible sports car parked under a canopy of autumn trees. The orange and red leaves reflect on the glossy white paint. The top is down, revealing a high-quality leather interior. The shot is bright and cheerful, evoking the luxury of a weekend getaway." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDVGiDLXp9Wle76rWSRYMhq7ieFC6OB0FRfNUig91zMDGiWnq1OG9WGMByT47yf83J70mLkIUdMsrRZFmu3aKW-sXxdKoV90Uwh0hQMknqEdmMeDQXWI7BaBOUcaxqmFmviNw1nG4K_XT8bFrYCtGqbUKUIAfT9bravXkvlCwAlRlA0RXV9-OpmLJJI9aQwpDj8nSgrrqm6DHX24eGHU5viv4YLvpgMK1P-ironYYRdJpAZuONCBncp6fULCsfyvuw9hZL-6CQhr0"/>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Mercedes SL 63</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="space-y-0.5">
+<p class="font-body-sm text-body-sm text-on-surface">Oct 24 - Oct 26, 2023</p>
+<p class="font-label-caps text-[11px] text-on-surface-variant">2 DAYS</p>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Confirmed
+                                    </span>
+</td>
+<td class="px-6 py-5">
+<p class="font-body-md text-body-md text-on-surface font-bold">$920.00</p>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-primary" title="View Details">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant" title="Download Invoice">
+<span class="material-symbols-outlined" data-icon="receipt">receipt</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-outline-variant flex justify-between items-center bg-surface-container-lowest">
+<button class="px-4 py-2 text-on-surface-variant hover:text-on-surface transition-colors font-body-sm text-body-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+                        Previous
+                    </button>
+<div class="flex gap-1">
+<button class="w-8 h-8 rounded bg-primary text-on-primary font-bold text-xs">1</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-low text-on-surface-variant text-xs">2</button>
+<button class="w-8 h-8 rounded hover:bg-surface-container-low text-on-surface-variant text-xs">3</button>
+<span class="px-2">...</span>
+<button class="w-8 h-8 rounded hover:bg-surface-container-low text-on-surface-variant text-xs">12</button>
+</div>
+<button class="px-4 py-2 text-on-surface-variant hover:text-on-surface transition-colors font-body-sm text-body-sm flex items-center gap-1">
+                        Next
+                        <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Contextual Stats Cards (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<div class="bg-surface p-6 rounded-xl border border-outline-variant flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-caps text-label-caps uppercase">Weekly Utilization</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">84.2%</h3>
+</div>
+</div>
+<div class="bg-surface p-6 rounded-xl border border-outline-variant flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-caps text-label-caps uppercase">Awaiting Approval</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">07</h3>
+</div>
+</div>
+<div class="bg-surface p-6 rounded-xl border border-outline-variant flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-caps text-label-caps uppercase">Today's Revenue</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">$5,950</h3>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple Micro-interaction for table rows
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', () => {
+                row.style.transform = 'scale(0.995)';
+                setTimeout(() => {
+                    row.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+    </script>
+</body></html>

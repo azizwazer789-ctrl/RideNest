@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RideNest Analytics | Fleet Intelligence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .chart-container { position: relative; width: 100%; height: 200px; }
+        .glass-effect { backdrop-filter: blur(8px); background-color: rgba(255, 255, 255, 0.8); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        @keyframes growUp { from { height: 0; } to { height: 100%; } }
+        .animate-grow { animation: growUp 1s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#b4c5ff",
+                        "surface": "#faf8ff",
+                        "primary-container": "#2563eb",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-container": "#ededf9",
+                        "on-primary-container": "#eeefff",
+                        "on-surface": "#191b23",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary": "#004ac6",
+                        "surface-tint": "#0053db",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2e3039",
+                        "secondary-container": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "outline": "#737686",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#e1e2ed",
+                        "surface-container-low": "#f3f3fe",
+                        "on-surface-variant": "#434655",
+                        "tertiary": "#943700",
+                        "on-tertiary-container": "#ffede6",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191b23",
+                        "on-primary-fixed": "#00174b",
+                        "outline-variant": "#c3c6d7",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-bright": "#faf8ff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "tertiary-container": "#bc4800",
+                        "secondary": "#565e74",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e7f3",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-variant": "#e1e2ed",
+                        "on-secondary-container": "#5c647a",
+                        "surface-dim": "#d9d9e5",
+                        "on-secondary-fixed": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "container-padding-mobile": "16px",
+                        "stack-lg": "24px",
+                        "container-padding": "32px",
+                        "base": "8px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-stack-lg z-50">
+<div class="px-6 mb-10">
+<h1 class="font-display-lg text-display-lg font-bold text-primary">RideNest</h1>
+<p class="text-on-surface-variant font-body-sm">Fleet Management</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">directions_car</span>
+<span class="font-body-md">My Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-body-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">chat</span>
+<span class="font-body-md">Messages</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">star</span>
+<span class="font-body-md">Reviews</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md">Earnings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-primary bg-primary-container/10 border-l-4 border-primary font-bold" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-md">Calendar</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-body-md">Add Vehicle</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors rounded-lg">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[260px] min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-container-padding z-40">
+<div class="flex items-center bg-surface-container-low px-4 py-2 rounded-full w-96">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-full" placeholder="Search analytics..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant">
+<img class="h-full w-full object-cover" data-alt="A professional headshot of a female fleet operations manager with a confident smile, wearing business casual attire. The lighting is bright and clean with a soft-focus office background that fits the minimalist, high-end SaaS corporate aesthetic of RideNest." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-YAZDhpKVaHhVPSfvDyaFYVG054Uo6vz4f-4UJOmi2Ug3aJD_N4-bJBmBmSjEoTBU_13GPAqJfQhwXE6LwBvVfoEFuwSGnWqomD_DdEhMRagYG9Lp2nF9MxYRGYJMwwA7bshSUcc0CvEHjZesO1U7QotZa6iJWtrSGPmyaxSHjixCHz5vEyb1pwTZ1NjLP_y_B63YkHytCnH_rUleJPQHAfaZzh00InRqcdjzU8wQocvtNCDmX4MM2C5eXGx8rmqryxGrP46b7ps"/>
+</div>
+</div>
+</header>
+<!-- Analytics Dashboard Canvas -->
+<div class="pt-24 pb-12 px-container-padding">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Fleet Analytics</h2>
+<p class="text-on-surface-variant font-body-sm">Deep dive into your performance metrics for the last 30 days.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface border border-outline-variant px-4 py-2 rounded-lg text-body-sm font-medium hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">calendar_month</span>
+                        Last 30 Days
+                    </button>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg text-body-sm font-medium hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span>
+                        Export PDF
+                    </button>
+</div>
+</div>
+<!-- Top Row: High-level KPIs -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-gutter">
+<!-- Vehicle Utilization -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col gap-2">
+<span class="text-on-surface-variant font-label-caps uppercase">Vehicle Utilization</span>
+<div class="flex items-end gap-2">
+<span class="text-display-lg font-bold text-primary">82.4%</span>
+<span class="text-body-sm text-green-600 mb-2 flex items-center">
+<span class="material-symbols-outlined text-sm">trending_up</span> 4.2%
+                        </span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 82.4%"></div>
+</div>
+</div>
+<!-- Booking Conversion -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col gap-2">
+<span class="text-on-surface-variant font-label-caps uppercase">Conversion Rate</span>
+<div class="flex items-end gap-2">
+<span class="text-display-lg font-bold text-on-surface">12.8%</span>
+<span class="text-body-sm text-green-600 mb-2 flex items-center">
+<span class="material-symbols-outlined text-sm">trending_up</span> 1.5%
+                        </span>
+</div>
+<p class="text-body-sm text-on-surface-variant">Views to completed bookings</p>
+</div>
+<!-- Monthly Revenue -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col gap-2">
+<span class="text-on-surface-variant font-label-caps uppercase">Total Revenue</span>
+<div class="flex items-end gap-2">
+<span class="text-display-lg font-bold text-on-surface">$24,500</span>
+<span class="text-body-sm text-error mb-2 flex items-center">
+<span class="material-symbols-outlined text-sm">trending_down</span> 0.8%
+                        </span>
+</div>
+<p class="text-body-sm text-on-surface-variant">Estimated for October 2023</p>
+</div>
+<!-- Customer Growth -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col gap-2">
+<span class="text-on-surface-variant font-label-caps uppercase">Customer Growth</span>
+<div class="flex items-end gap-2">
+<span class="text-display-lg font-bold text-on-surface">+184</span>
+<span class="text-body-sm text-green-600 mb-2 flex items-center">
+<span class="material-symbols-outlined text-sm">trending_up</span> 12%
+                        </span>
+</div>
+<p class="text-body-sm text-on-surface-variant">New renters this month</p>
+</div>
+</div>
+<!-- Middle Row: Charts & Visualization -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-gutter">
+<!-- Revenue Over Time Line Chart (Custom CSS/HTML) -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-title-sm text-title-sm text-on-surface">Revenue Growth</h3>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-body-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-primary"></span> Current
+                            </div>
+<div class="flex items-center gap-1.5 text-body-sm text-on-surface-variant">
+<span class="w-3 h-3 rounded-full bg-outline-variant"></span> Previous
+                            </div>
+</div>
+</div>
+<div class="chart-container flex items-end justify-between gap-4 h-64 border-b border-l border-outline-variant p-4">
+<!-- Simplified Bar/Line visualization -->
+<div class="flex-1 bg-primary/10 hover:bg-primary/20 transition-all rounded-t relative group" style="height: 40%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-surface text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">12k</div>
+</div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/30 transition-all rounded-t relative group" style="height: 60%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-surface text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">18k</div>
+</div>
+<div class="flex-1 bg-primary/40 hover:bg-primary/50 transition-all rounded-t relative group" style="height: 55%"></div>
+<div class="flex-1 bg-primary/60 hover:bg-primary/70 transition-all rounded-t relative group" style="height: 80%"></div>
+<div class="flex-1 bg-primary/80 hover:bg-primary/90 transition-all rounded-t relative group" style="height: 70%"></div>
+<div class="flex-1 bg-primary hover:bg-primary-fixed-variant transition-all rounded-t relative group" style="height: 95%">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-surface text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">24.5k</div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-label-caps text-on-surface-variant">
+<span>MAY</span><span>JUN</span><span>JUL</span><span>AUG</span><span>SEP</span><span>OCT</span>
+</div>
+</div>
+<!-- Customer Segments -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg">
+<h3 class="font-title-sm text-title-sm text-on-surface mb-6">Customer Segment</h3>
+<div class="flex flex-col gap-6">
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface">Premium Renters</span>
+<span class="font-bold">45%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface">First-Time Users</span>
+<span class="font-bold">30%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 30%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-body-sm">
+<span class="text-on-surface">Returning Business</span>
+<span class="font-bold">25%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 25%"></div>
+</div>
+</div>
+</div>
+<div class="mt-12 p-4 bg-primary-container/5 rounded-lg border border-primary-container/10">
+<p class="text-body-sm text-on-surface-variant italic leading-relaxed">
+                            "Premium renters have increased by <span class="text-primary font-bold">12%</span> since introducing the concierge delivery service."
+                        </p>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Popular Vehicles List -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-stack-lg py-4 border-b border-outline-variant flex items-center justify-between">
+<h3 class="font-title-sm text-title-sm text-on-surface">Top Performing Vehicles</h3>
+<button class="text-primary text-body-sm font-medium hover:underline">View All Inventory</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-label-caps text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="px-stack-lg py-4">Vehicle</th>
+<th class="px-stack-lg py-4 text-center">Utilization</th>
+<th class="px-stack-lg py-4">Total Bookings</th>
+<th class="px-stack-lg py-4">Revenue</th>
+<th class="px-stack-lg py-4 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="px-stack-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A side view of a sleek, black 2024 Tesla Model S Plaid in a brightly lit, minimalist studio with a neutral grey background. The car's metallic finish reflects soft studio lighting, showcasing the premium and futuristic aesthetic of the RideNest fleet." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANiA8hGnsUV2XqVcr45nxetO0XXI5jJThHXv_NvID7FTft_drrjdjAAvC1lTL5Ec5DL953dHWVaV8wOvNwvL0chAaXC3Q7cqAo93vMNkN0wuYIeK3oo7_Ex-CqhsqStmAyv8pKUlHdmmCAaXXb2pgRMOp2vSW0XQXXSuLrsX7F5HdJFWh-SyR0Uxn35hQFS633nbhLVrjAyHbB7QAjpz6lf6-V70PIhFf7GMRm9DAlWuPsA5YM0doJYeyEjmfehIwjVfxKWa6Myhk"/>
+</div>
+<div>
+<p class="font-body-md font-bold text-on-surface">Tesla Model S</p>
+<p class="text-xs text-on-surface-variant">Electric • Luxury</p>
+</div>
+</div>
+</td>
+<td class="px-stack-lg py-4">
+<div class="flex flex-col items-center gap-1">
+<span class="text-body-sm font-medium">94%</span>
+<div class="w-24 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-green-500 h-full" style="width: 94%"></div>
+</div>
+</div>
+</td>
+<td class="px-stack-lg py-4 text-body-sm">48 bookings</td>
+<td class="px-stack-lg py-4 text-body-sm font-bold">$7,200.00</td>
+<td class="px-stack-lg py-4 text-right">
+<span class="px-2 py-1 rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider">High Demand</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="px-stack-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A clean, studio-lit photo of a white 2023 Porsche 911 Carrera. The vehicle is positioned at a three-quarter angle on a pristine white floor with soft shadows, emphasizing luxury, speed, and high-end rental value. The overall mood is sophisticated and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeks6OFJCjXmbyIxNkqDNxMACWoK7ZlVenlJYb9UJEf1MkRSm9hpSpIO7FDEttbTAw650q4cnm9E1G49xSaLlCI9cZEocXVAQiQMSHXczdkRA_s0eB20R1lNkrt8rkF5USTbe7LGACQxpSxiIYNvTh-N455wlvc-2nYMRzcA2wAuXfwtRqFKk-sNESA8WmlVNWBmCQFdAorv34v-vh4oklvph-a49JHKlapKsKxhUgFc9BYJ_xLWOMTrrAqDb_jo59YvqIYtSif_k"/>
+</div>
+<div>
+<p class="font-body-md font-bold text-on-surface">Porsche 911</p>
+<p class="text-xs text-on-surface-variant">Sport • Premium</p>
+</div>
+</div>
+</td>
+<td class="px-stack-lg py-4">
+<div class="flex flex-col items-center gap-1">
+<span class="text-body-sm font-medium">88%</span>
+<div class="w-24 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 88%"></div>
+</div>
+</div>
+</td>
+<td class="px-stack-lg py-4 text-body-sm">32 bookings</td>
+<td class="px-stack-lg py-4 text-body-sm font-bold">$12,400.00</td>
+<td class="px-stack-lg py-4 text-right">
+<span class="px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-[10px] font-bold uppercase tracking-wider">Top Earner</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="px-stack-lg py-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A modern 2024 Land Rover Defender in silver, parked in a minimalist grey concrete architectural space. The vehicle's rugged but clean design is highlighted by dramatic top-down lighting. The image captures a sense of adventure combined with high-end luxury suitable for a premium marketplace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIu3TYTk6IAaIiNGHYAhBBtgTEUQLHxXaslua1HOlxzplV4k2mgmL-m-6t3PEbw9UqdikLzLWyjPd8C5XJ_XzUuRatzi9PkT3j_i-T4Dq8wYJHJ3F1uQNkb17sE10cGXMkmO-zCU0LotcfPDmTbXy5iNmlBLRy49ddZuEkeujCVbAmvX-Jn8V0_Crwnh_HEH8c5xaNErnoB80KoW244eg4hSV0ZJo_L2ZA_mRdTqxSobPKuvK7aj0kE_4qk-4SpPP-0Do_nwPY4qU"/>
+</div>
+<div>
+<p class="font-body-md font-bold text-on-surface">Land Rover Defender</p>
+<p class="text-xs text-on-surface-variant">SUV • All-terrain</p>
+</div>
+</div>
+</td>
+<td class="px-stack-lg py-4">
+<div class="flex flex-col items-center gap-1">
+<span class="text-body-sm font-medium">62%</span>
+<div class="w-24 h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="bg-yellow-500 h-full" style="width: 62%"></div>
+</div>
+</div>
+</td>
+<td class="px-stack-lg py-4 text-body-sm">14 bookings</td>
+<td class="px-stack-lg py-4 text-body-sm font-bold">$4,800.00</td>
+<td class="px-stack-lg py-4 text-right">
+<span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-700 text-[10px] font-bold uppercase tracking-wider">Average</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Micro-Interaction Trigger (FAB logic from prompt) -->
+<!-- Suppression: FAB should only be on Dashboard/Home. This is Analytics. -->
+<script>
+        // Simple micro-interaction for active state styling and chart hover
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartBars = document.querySelectorAll('.chart-container > div');
+            chartBars.forEach(bar => {
+                bar.addEventListener('mouseenter', () => {
+                    bar.classList.add('scale-x-110');
+                });
+                bar.addEventListener('mouseleave', () => {
+                    bar.classList.remove('scale-x-110');
+                });
+            });
+
+            // Tab logic
+            const tabs = document.querySelectorAll('nav a');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    // Logic for real navigation would go here
+                    console.log('Navigating to:', tab.textContent.trim());
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import CustomerBookingCard from "./CustomerBookingCard";
+import RescheduleModal from "./RescheduleModal";
 import StatCard, { StatCardSkeleton } from "./StatCard";
 import {
   cancelBooking,
@@ -22,6 +23,7 @@ function CustomerDashboard() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [cancellingId, setCancellingId] = useState(null);
+  const [reschedulingBooking, setReschedulingBooking] = useState(null);
 
   const refreshBookings = useCallback(async () => {
     const data = await getMyBookings();
@@ -129,6 +131,29 @@ function CustomerDashboard() {
       setError(getErrorMessage(err));
     } finally {
       setCancellingId(null);
+    }
+  }
+
+  function handleOpenReschedule(booking) {
+    setError("");
+    setSuccess("");
+    setReschedulingBooking(booking);
+  }
+
+  function handleCloseReschedule() {
+    setReschedulingBooking(null);
+  }
+
+  async function handleRescheduled() {
+    setReschedulingBooking(null);
+    setError("");
+    setSuccess("Booking rescheduled successfully.");
+
+    try {
+      const nextBookings = await refreshBookings();
+      await loadVehicleDetails(nextBookings);
+    } catch (err) {
+      setError(getErrorMessage(err));
     }
   }
 
@@ -292,11 +317,21 @@ function CustomerDashboard() {
                 vehicle={vehiclesById[booking.vehicle_id]}
                 onCancel={handleCancel}
                 cancellingId={cancellingId}
+                onReschedule={handleOpenReschedule}
               />
             ))}
           </div>
         )}
       </section>
+
+      <RescheduleModal
+        booking={reschedulingBooking}
+        vehicle={
+          reschedulingBooking ? vehiclesById[reschedulingBooking.vehicle_id] : null
+        }
+        onClose={handleCloseReschedule}
+        onRescheduled={handleRescheduled}
+      />
     </div>
   );
 }

@@ -12,6 +12,7 @@ const navItems = [
   { to: "/dashboard/payouts", label: "Vendor Payouts" },
   { to: "/dashboard/analytics", label: "Analytics" },
   { to: "/dashboard/reviews", label: "Reviews" },
+  { to: "/dashboard/addons", label: "Add-ons" },
 ];
 
 const pageTitles = {
@@ -22,6 +23,7 @@ const pageTitles = {
   "/dashboard/payouts": "Vendor Payouts",
   "/dashboard/analytics": "Analytics Dashboard",
   "/dashboard/reviews": "Reviews Moderation",
+  "/dashboard/addons": "Add-ons",
 };
 
 function DashboardLayout() {

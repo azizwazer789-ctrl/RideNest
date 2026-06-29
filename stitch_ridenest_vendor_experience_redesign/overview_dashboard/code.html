@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RideNest - Fleet Management Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        @keyframes subtle-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float { animation: subtle-float 3s ease-in-out infinite; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#b4c5ff",
+                        "surface": "#faf8ff",
+                        "primary-container": "#2563eb",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-container": "#ededf9",
+                        "on-primary-container": "#eeefff",
+                        "on-surface": "#191b23",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "primary": "#004ac6",
+                        "surface-tint": "#0053db",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#2e3039",
+                        "secondary-container": "#dae2fd",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-secondary": "#ffffff",
+                        "background": "#faf8ff",
+                        "tertiary-fixed": "#ffdbcd",
+                        "outline": "#737686",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#e1e2ed",
+                        "surface-container-low": "#f3f3fe",
+                        "on-surface-variant": "#434655",
+                        "tertiary": "#943700",
+                        "on-tertiary-container": "#ffede6",
+                        "on-error-container": "#93000a",
+                        "on-background": "#191b23",
+                        "on-primary-fixed": "#00174b",
+                        "outline-variant": "#c3c6d7",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-bright": "#faf8ff",
+                        "inverse-on-surface": "#f0f0fb",
+                        "tertiary-container": "#bc4800",
+                        "secondary": "#565e74",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e7e7f3",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#360f00",
+                        "surface-variant": "#e1e2ed",
+                        "on-secondary-container": "#5c647a",
+                        "surface-dim": "#d9d9e5",
+                        "on-secondary-fixed": "#131b2e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "container-padding-mobile": "16px",
+                        "stack-lg": "24px",
+                        "container-padding": "32px",
+                        "base": "8px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "title-sm": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "label-caps": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-sm": ["18px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-[260px] bg-surface border-r border-outline-variant flex flex-col py-stack-lg z-50">
+<div class="px-6 mb-8">
+<h1 class="font-display-lg text-display-lg font-bold text-primary tracking-tighter">RideNest</h1>
+<p class="text-on-surface-variant font-label-caps text-[10px] tracking-widest uppercase">Fleet Management</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary bg-primary-container/10 border-l-4 border-primary font-bold transition-transform active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+<span class="font-body-md">My Vehicles</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="event_note">event_note</span>
+<span class="font-body-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-body-md">Messages</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md">Earnings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md">Analytics</span>
+</a>
+</nav>
+<div class="px-3 border-t border-outline-variant pt-4 mt-auto">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[260px]">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-container-padding z-40">
+<div class="relative w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-body-sm transition-all outline-none" placeholder="Search vehicles, bookings, or owners..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all active:opacity-80">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:bg-surface-container-low rounded-full p-2 transition-all active:opacity-80">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="dark_mode">dark_mode</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right">
+<p class="font-label-caps text-on-surface leading-none">Aziz A.</p>
+<p class="text-[10px] text-on-surface-variant font-medium">Fleet Pro</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary-fixed-dim" data-alt="Close-up studio portrait of a professional male manager with a kind smile, set against a clean minimalist gray background. The lighting is soft and high-end, fitting a premium SaaS corporate aesthetic with crisp details and high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD1mZH2RYuPWF-9HBfinrywl4EGEvxPsnB_Za6zmQpK4nC0-0fV8X9XHkT4xuNf0MnAK-63TOUhcGvxs6rouAtrk8-pZLPK8GDAWM_TriJpJX1vBo_j477ORUP76pbqBdR3EXeaJFNBEyL3C8uAukTx3EjPvJpxpz2uM0lVdmzZ_8wFL2u5eZaUZWW7NRIg_liPd5MlpXivzSVV7FQWdn7dbyxcaks6IKHTUi_vEswlR6LQbNSiozxqZWRZksfrEuCpq1ofY0ejOE"/>
+</div>
+</div>
+</header>
+<section class="mt-16 p-container-padding">
+<!-- Dashboard Header -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface tracking-tight">Good Morning, Aziz 👋</h2>
+<p class="text-on-surface-variant font-body-md mt-1">Manage your fleet and rental business performance.</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-xl font-title-sm hover:bg-primary-container transition-all flex items-center gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                    Add Vehicle
+                </button>
+</div>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-5 gap-stack-lg mb-10">
+<div class="bg-surface border border-outline-variant p-6 rounded-2xl hover:shadow-md transition-shadow group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-primary-fixed text-primary">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+</div>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md">+12%</span>
+</div>
+<p class="text-on-surface-variant font-label-caps mb-1">Total Vehicles</p>
+<h3 class="text-headline-md font-bold text-on-surface">42</h3>
+</div>
+<div class="bg-surface border border-outline-variant p-6 rounded-2xl hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-tertiary-fixed text-tertiary">
+<span class="material-symbols-outlined" data-icon="key">key</span>
+</div>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md">Active</span>
+</div>
+<p class="text-on-surface-variant font-label-caps mb-1">Active Rentals</p>
+<h3 class="text-headline-md font-bold text-on-surface">18</h3>
+</div>
+<div class="bg-surface border border-outline-variant p-6 rounded-2xl hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-secondary-fixed text-secondary">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+</div>
+<span class="text-xs font-bold text-error bg-error-container/20 px-2 py-1 rounded-md">8 New</span>
+</div>
+<p class="text-on-surface-variant font-label-caps mb-1">Pending Requests</p>
+<h3 class="text-headline-md font-bold text-on-surface">24</h3>
+</div>
+<div class="bg-surface border border-outline-variant p-6 rounded-2xl hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-primary-container/10 text-primary">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</div>
+<span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-md">+$2.4k</span>
+</div>
+<p class="text-on-surface-variant font-label-caps mb-1">Monthly Revenue</p>
+<h3 class="text-headline-md font-bold text-on-surface">$12,840</h3>
+</div>
+<div class="bg-surface border border-outline-variant p-6 rounded-2xl hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 rounded-xl bg-tertiary-fixed text-tertiary">
+<span class="material-symbols-outlined" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="text-xs font-bold text-on-surface-variant px-2 py-1">Top 1%</span>
+</div>
+<p class="text-on-surface-variant font-label-caps mb-1">Avg Rating</p>
+<h3 class="text-headline-md font-bold text-on-surface">4.92</h3>
+</div>
+</div>
+<!-- Dashboard Analytics Main Area -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- Revenue Chart (Spans 2 columns) -->
+<div class="lg:col-span-2 bg-white border border-outline-variant rounded-2xl p-stack-lg shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h4 class="font-headline-md text-on-surface">Revenue Growth</h4>
+<p class="text-body-sm text-on-surface-variant">Daily earnings breakdown for the last 30 days.</p>
+</div>
+<select class="bg-surface-container-low border border-outline-variant rounded-lg px-4 py-2 text-body-sm outline-none focus:ring-2 focus:ring-primary">
+<option>Last 30 Days</option>
+<option>Last 90 Days</option>
+<option>This Year</option>
+</select>
+</div>
+<div class="relative h-[300px] w-full flex items-end justify-between gap-2 px-2">
+<!-- Simplified Linear Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+<div class="border-b border-outline-variant/30 w-full h-0"></div>
+</div>
+<!-- Mock Bars with premium gradients -->
+<div class="w-full bg-primary/20 rounded-t-sm h-[40%] hover:bg-primary transition-colors cursor-pointer relative group">
+<div class="hidden group-hover:block absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-primary-container text-[10px] px-2 py-1 rounded">M</div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[55%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[48%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[65%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/20 rounded-t-sm h-[80%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/30 rounded-t-sm h-[72%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/40 rounded-t-sm h-[88%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/50 rounded-t-sm h-[60%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/60 rounded-t-sm h-[92%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/70 rounded-t-sm h-[85%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary/80 rounded-t-sm h-[95%] hover:bg-primary transition-colors cursor-pointer"></div>
+<div class="w-full bg-primary rounded-t-sm h-[98%] hover:bg-primary-container transition-colors cursor-pointer"></div>
+</div>
+<div class="flex justify-between mt-4 text-label-caps text-on-surface-variant opacity-60">
+<span>Jan 01</span>
+<span>Jan 15</span>
+<span>Jan 30</span>
+</div>
+</div>
+<!-- Recent Activity Timeline -->
+<div class="bg-surface border border-outline-variant rounded-2xl p-stack-lg shadow-sm">
+<h4 class="font-headline-md text-on-surface mb-6">Recent Activity</h4>
+<div class="space-y-6">
+<div class="flex gap-4 relative">
+<div class="absolute left-4 top-10 bottom-0 w-px bg-outline-variant"></div>
+<div class="w-8 h-8 rounded-full bg-primary-container/10 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="text-body-sm font-medium text-on-surface">Payment confirmed</p>
+<p class="text-[12px] text-on-surface-variant">Booking #4290 - $450.00</p>
+<span class="text-[10px] text-outline mt-1 block">2 mins ago</span>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="absolute left-4 top-10 bottom-0 w-px bg-outline-variant"></div>
+<div class="w-8 h-8 rounded-full bg-tertiary-container/10 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[16px] text-tertiary" data-icon="message">message</span>
+</div>
+<div>
+<p class="text-body-sm font-medium text-on-surface">New message from Leo</p>
+<p class="text-[12px] text-on-surface-variant">"Is the Tesla available for extend?"</p>
+<span class="text-[10px] text-outline mt-1 block">45 mins ago</span>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="absolute left-4 top-10 bottom-0 w-px bg-outline-variant"></div>
+<div class="w-8 h-8 rounded-full bg-error-container/10 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[16px] text-error" data-icon="report_problem">report_problem</span>
+</div>
+<div>
+<p class="text-body-sm font-medium text-on-surface">Maintenance alert</p>
+<p class="text-[12px] text-on-surface-variant">BMW 3-Series requires oil change.</p>
+<span class="text-[10px] text-outline mt-1 block">2 hours ago</span>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[16px] text-on-secondary-container" data-icon="person_add">person_add</span>
+</div>
+<div>
+<p class="text-body-sm font-medium text-on-surface">New booking request</p>
+<p class="text-[12px] text-on-surface-variant">Sarah J. for Porsche 911</p>
+<span class="text-[10px] text-outline mt-1 block">4 hours ago</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-2 text-primary font-title-sm hover:underline">View All Activity</button>
+</div>
+</div>
+<!-- Secondary Content: Bookings & Top Performing -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-stack-lg mt-stack-lg">
+<!-- Recent Upcoming Bookings -->
+<div class="bg-white border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center">
+<h4 class="font-headline-md text-on-surface">Upcoming Bookings</h4>
+<a class="text-primary text-body-sm hover:underline" href="#">Manage All</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-label-caps text-on-surface-variant border-b border-outline-variant">
+<tr>
+<th class="px-6 py-4">Customer</th>
+<th class="px-6 py-4">Vehicle</th>
+<th class="px-6 py-4">Dates</th>
+<th class="px-6 py-4">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-white flex items-center justify-center font-bold text-xs">EJ</div>
+<span class="font-medium text-on-surface">Erik Johnson</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Tesla Model S</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 12 - 15</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider">Confirmed</span>
+</td>
+</tr>
+<tr class="hover:bg-surface transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary text-white flex items-center justify-center font-bold text-xs">LM</div>
+<span class="font-medium text-on-surface">Linda Miller</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Range Rover</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 14 - 20</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-secondary-container/50 text-on-secondary-container text-[10px] font-bold uppercase tracking-wider">Pending</span>
+</td>
+</tr>
+<tr class="hover:bg-surface transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-dim flex items-center justify-center font-bold text-xs">RS</div>
+<span class="font-medium text-on-surface">Rob Smith</span>
+</div>
+</td>
+<td class="px-6 py-4 text-on-surface-variant">Audi RS7</td>
+<td class="px-6 py-4 text-on-surface-variant">Oct 18 - 22</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full bg-green-50 text-green-700 text-[10px] font-bold uppercase tracking-wider">Confirmed</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Top Performing Vehicles Grid -->
+<div class="bg-white border border-outline-variant rounded-2xl p-6 shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline-md text-on-surface">Top Vehicles</h4>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="group cursor-pointer">
+<div class="relative h-32 rounded-xl overflow-hidden mb-3">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500" data-alt="A side-profile cinematic photograph of a glossy midnight-black Tesla Model S parked in front of a modern glass skyscraper. The lighting is moody and professional, highlighting the aerodynamic curves of the car. The color palette is dominated by cool blues and sharp silver accents, reflecting a high-end luxury vehicle aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnIQZm5K3nquLjgEqNnmNebjefqUfAu9yUmSemlzAyYryJmetiHTTxnCIHeTmR_6CiKNtHFEleWgma2Rs2TbptdyIxXCvh-2w4hCFlpjuuYpOLobNSWPIy5D7uFhRGszu3eiSkS_1snC3GwaXeVIVG4eOnxQ_OaxTB4AASfI2XSrjQstr94VaW-bnvoQWYyUjhfSiGHVWRKbWSpWbKGejGRXu4RF3bAGkp_1kiXfAniKFy4vS2T188rNBujKsAU9PhAaj7f12UnGc"/>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-primary">#1 EARNER</div>
+</div>
+<h5 class="text-body-sm font-bold text-on-surface">Tesla Model S Plaid</h5>
+<div class="flex justify-between items-center mt-1">
+<span class="text-[12px] text-on-surface-variant">$2,450 /mo</span>
+<div class="flex items-center gap-1 text-[12px] font-medium text-green-600">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                                    +18%
+                                </div>
+</div>
+</div>
+<div class="group cursor-pointer">
+<div class="relative h-32 rounded-xl overflow-hidden mb-3">
+<img class="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500" data-alt="A powerful front-three-quarters view of a metallic silver Porsche 911 Carrera on an open coastal road during the golden hour. The warm sunlight glints off the vehicle's metallic finish, creating a feeling of freedom and speed. The environment is high-contrast and luxurious, emphasizing premium performance and design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4LzbCHZxrs1phceRndmaw40REaN5vzfE8wxsUsBRuqb_LS6SDwpkBbDUANA8OKiSAXpRvXNzaXZGxyKWLnBT7sEDd0D5ynN23a0uF6-AZ__6-1UTgb8y8XmTOT6GZxnmvkxiIpbRs96GZ8li-C9mD1hdIWu3h1i49SVBpils7bHyETm1wz5hqCQ5b-aSS7mrRkkOHvIMJCV25osLUpmwX73Re8zSUlVhIOOQe08j6N84V5_1lgnH7nKk2jIEEJePsjG1ytiLlSYU"/>
+<div class="absolute top-2 right-2 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-tertiary">98% UTILIZED</div>
+</div>
+<h5 class="text-body-sm font-bold text-on-surface">Porsche 911 Carrera</h5>
+<div class="flex justify-between items-center mt-1">
+<span class="text-[12px] text-on-surface-variant">$3,100 /mo</span>
+<div class="flex items-center gap-1 text-[12px] font-medium text-green-600">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                                    +12%
+                                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Latest Reviews Bar -->
+<div class="mt-stack-lg bg-surface border border-outline-variant rounded-2xl p-6 shadow-sm overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline-md text-on-surface">Latest Community Reviews</h4>
+<span class="text-body-sm font-medium text-primary">View Global Rating (4.9/5)</span>
+</div>
+<div class="flex gap-stack-lg overflow-x-auto pb-4 custom-scrollbar">
+<div class="min-w-[320px] bg-white border border-outline-variant rounded-xl p-4 shadow-sm hover:border-primary transition-all">
+<div class="flex items-center gap-3 mb-3">
+<img class="w-10 h-10 rounded-full" data-alt="Close-up headshot of a smiling female customer with a professional and friendly expression. She is set against a brightly lit, minimalist office background. The lighting is clean and soft, emphasizing a high-quality, trustworthy user experience. The visual style is modern and polished." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_x-YKu10Dd-wi0-ARGUDGT6Q-fMYOMxyB-2-VPXcm0B6xiJb81PeO0WitYtoC7ApedqvMeMDY7_nIB73FpW5r_A3gYxEsrKeqNKGtBx31G-GVUHKCXvoIFQfvsnjE-fR9cTLEKllUOTkijVX6-nMjvgVp_tR1JJVuqFyeyrQHeu7j0lDPIMhDSZGcZMtQoZVUSChFrObtKRjH1CUFnMIOh_h2qXa5FaWpp4frDJj2fzpwu8E_UBQ3MRdcWZVwostogWTi1ffY70Q"/>
+<div>
+<p class="text-body-sm font-bold text-on-surface">Marcella J.</p>
+<div class="flex text-yellow-500">
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant italic">"The Tesla was in pristine condition. Aziz is a great host, made the pickup and drop-off incredibly smooth. Highly recommended!"</p>
+</div>
+<div class="min-w-[320px] bg-white border border-outline-variant rounded-xl p-4 shadow-sm hover:border-primary transition-all">
+<div class="flex items-center gap-3 mb-3">
+<img class="w-10 h-10 rounded-full" data-alt="A clean portrait of a middle-aged male executive looking confident and approachable. The lighting is natural and even, set in a contemporary lobby with soft architectural details. The aesthetic is professional, clean, and minimalist, echoing a luxury hospitality service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ3MI2B6MrtQAfgA3zOMVESXbf4LpQFSOCWnRmt0Jj6pnY51TQdiRuLWCWrxYSmha4p-SjiHqRo6Sw9lFO7ysaFjlHRptKqIqSuiIsBgoaEYe2_LINgNsdoKNy4BtQhFljHhpW0sQVQr8HlaTAJ8jj1-oaLw4SQI_YayYq97Dh8FnmK6btRFbDsLtP6GcD9zi0Exo0awtK8sHm8L_bReAXvRi6E3EZkjsyGAMCaXjGPR9Orfz9Rny9-D0jRvDM9Hh3uxn7Ka-5Urg"/>
+<div>
+<p class="text-body-sm font-bold text-on-surface">Julian S.</p>
+<div class="flex text-yellow-500">
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant italic">"Renting the Range Rover was the highlight of our weekend trip. Seamless experience through RideNest. Will definitely rent again."</p>
+</div>
+<div class="min-w-[320px] bg-white border border-outline-variant rounded-xl p-4 shadow-sm hover:border-primary transition-all">
+<div class="flex items-center gap-3 mb-3">
+<img class="w-10 h-10 rounded-full" data-alt="A focused headshot of a young woman with a calm and satisfied expression, set against a soft-focus garden background during early morning light. The color palette is natural and warm, providing a soft contrast. The high-resolution image quality suggests a premium and high-trust marketplace platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsiFuFMvTbXwAvHdN74r3MSAA8DHLKkzRO7LC6GZt5QLruwst6TqwsJ3VsKkIvNmxB0044qPAuwfjI_nEbrE9mhyI1RLU54nxb8tfKmOwiroGUdVwCXYnJ_lGEMQ14bKBr6aS-oKGMljZGLQYWXssgbH3FwXAUzlOp5vDP2AWFe58YXY7yPNdwCbFM9lAPXL4VJMoYLadTkLFJziRqF01yN6uuPINaKCrK16jgkWzd_WcOMzw0FwUOo6eO0cGdfBFCOI5X-2dWMgQ"/>
+<div>
+<p class="text-body-sm font-bold text-on-surface">Anita B.</p>
+<div class="flex text-yellow-500">
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="star" style="font-variation-settings: 'FILL' 0.5;">star</span>
+</div>
+</div>
+</div>
+<p class="text-body-sm text-on-surface-variant italic">"Excellent communication and vehicle quality. There was a tiny delay in key handoff, but Aziz handled it perfectly."</p>
+</div>
+</div>
+</div>
+</section>
+<footer class="p-container-padding text-center border-t border-outline-variant mt-10">
+<p class="text-[12px] text-on-surface-variant opacity-60 uppercase font-label-caps tracking-widest">© 2024 RideNest Fleet Management System • Built for Professional Hosts</p>
+</footer>
+</main>
+<script>
+        // Simple micro-interaction for active scaling
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.98)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+
+        // Search bar focus ring simulation
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary/20');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary/20');
+        });
+    </script>
+</body></html>
